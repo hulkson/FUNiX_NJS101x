@@ -1,0 +1,29 @@
+<%- include('../layout/head.ejs') %>
+<link rel="stylesheet" href="/css/main.css">
+<title>Funix-ASM1</title>
+</head>
+<!-- ------------------------------------- -->
+
+<body>
+<!-- include navbar -->
+<%- include('../layout/navbar.ejs') %>
+<!-- ------------------------------------- -->
+<main>
+   <div class="container">
+      <div class="row">
+         <div class="mb-3 mt-5 col-6 offset-3">
+            <h4>Đăng Nhập:</h4>   
+            <label for="login-email" class="form-label mt-4">Email address</label>
+            <input type="email" class="form-control" id="login-email" placeholder="name@example.com">
+          </div>
+          <div class="mb-3 col-6 offset-3">
+            <label for="login-password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="login-password">
+          </div>
+      </div>
+   </div>
+</main>
+
+<!-- ------------------------------------- -->
+<%- include('../layout/end.ejs') %>
+</body>

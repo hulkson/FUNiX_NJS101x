@@ -1,0 +1,19 @@
+{
+  "name": "nodejs_asm1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --inspect app.js"
+  },
+  "author": "jake",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "mongoose": "^6.4.7",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.19"
+  }
+}

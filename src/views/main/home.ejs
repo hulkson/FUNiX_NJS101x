@@ -1,0 +1,25 @@
+  <%- include('../layout/head.ejs') %>
+  <link rel="stylesheet" href="/css/main.css">
+  <title>Funix-ASM1</title>
+</head>
+<!-- ------------------------------------- -->
+
+<body>
+  <!-- include navbar -->
+  <%- include('../layout/navbar.ejs') %>
+<!-- ------------------------------------- -->
+  <main>
+    <div class="container">
+      <!-- button -->
+      <div class="d-flex min-vh-100 justify-content-center align-items-center">
+        <a aria-current="page" class="btn btn-primary m-2" href="/checkin">Điểm Danh</a>
+        <a aria-current="page" class="btn btn-info m-2" href="/onleave">Nghỉ Phép</a>
+        <a aria-current="page" class="btn btn-danger m-2" href="/checkout">Kết Thúc Làm</a>
+      </div>
+    </div>
+      
+  </main>
+
+<!-- ------------------------------------- -->
+  <%- include('../layout/end.ejs') %>
+</body>

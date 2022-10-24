@@ -1,0 +1,75 @@
+<%- include('../layout/head.ejs') %>
+<link rel="stylesheet" href="/css/main.css">
+<title>Funix-ASM1</title>
+</head>
+<!--------------------------------------- -->
+
+<body>
+<!-- include navbar -->
+<%- include('../layout/navbar.ejs') %>
+<!-- ------------------------------------- -->
+<main>
+    <!-- modal-checkout-confirm -->
+    <div>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">XÁC NHẬN KẾT THÚC</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mt-4 text-center">
+              <h6>THÔNG TIN ĐIỂM DANH</h6>
+              <p>Họ và tên: Nguyễn Văn A</p>
+              <p>nơi làm việc: công ty</p>
+              <p>Thời gian bắt đầu: 9:00</p>
+              <p>Thời gian kết thúc: 18:00</p>
+              <p>Số giờ làm: 8 giờ</p>
+              <P>Số lần kết thúc trong ngày: 2</P>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modal-checkout-success">Kết Thúc</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- modal-checkout-success -->
+    <div class="modal fade" id="modal-checkout-success" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">KẾT THÚC THÀNH CÔNG</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <h6 class="text-center">THÔNG TIN ĐIỂM DANH</h6>
+            <div class="mt-4 text-center">
+              <h6>Điểm danh lần: 1</h6>
+              <p>nơi làm việc: công ty</p>
+              <p>Thời gian bắt đầu: 9:00</p>
+              <p>Thời gian kết thúc: 18:00</p>
+              <p>Số giờ làm: 8 giờ</p>
+              <p class="work-status-btn">Trạng thái: Chưa điểm danh</p>
+            </div>
+            <div class="mt-4 text-center">
+              <h6>Điểm danh lần: 2</h6>
+              <p>nơi làm việc: công ty</p>
+              <p>Thời gian bắt đầu: 9:00</p>
+              <p>Thời gian kết thúc: 18:00</p>
+              <p>Số giờ làm: 8 giờ</p>
+              <p class="work-status-btn">Trạng thái: Chưa điểm danh</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</main>
+
+<!-- ------------------------------------- -->
+<%- include('../layout/end.ejs') %>
+</body>

@@ -1,0 +1,35 @@
+<%- include('../layout/head.ejs') %>
+<link rel="stylesheet" href="/css/main.css">
+<title>Funix-ASM1</title>
+</head>
+<!-- ------------------------------------- -->
+
+<body>
+<!-- include navbar -->
+<%- include('../layout/navbar.ejs') %>
+<!-- ------------------------------------- -->
+<main>
+   <div class="container">
+      <div class="row">
+         <div class="mb-3 col-6 offset-3">
+            <h4 class="mt-5">Thông Tin Cá Nhân:</h4>
+            <br>
+            <h6 id="user-id">User ID: AB123</h6>
+            <h6 id="user-name">Họ và Tên: Nguyễn Văn A</h6>
+            <h6 id="user-dob">DoB: 2002/1/1</h6>
+            <h6 id="user-salaryScale">Salary Scale: 1.0</h6>
+            <h6 id="user-startDate">Start Date: 2002/1/1</h6>
+            <h6 id="user-department">Department: Công ty</h6>
+            <h6 id="user-annualLeave">Phép Năm: 5 Ngày</h6>
+         </div>
+          <div class="mb-3 col-4 offset-3">
+            <label for="imageUrl" class="form-label">Image URL</label>
+            <input type="text" class="form-control" id="imageUrl">
+          </div>
+      </div>
+   </div>
+</main>
+
+<!-- ------------------------------------- -->
+<%- include('../layout/end.ejs') %>
+</body>
