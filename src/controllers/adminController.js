@@ -34,3 +34,11 @@ exports.getWorkingTimeInfoPage = (req, res) => {
 exports.getUserCovidInfoPage = (req, res) => {
   res.render("main/user-covid-info");
 };
+
+exports.getLoginPage = (req, res) => {
+  res.render("main/login");
+};
+
+exports.getSignupPage = (req, res) => {
+  res.render("main/signup");
+};

@@ -13,6 +13,8 @@ router.get('/checkout', adminController.getCheckoutPage);
 router.get('/user-info', adminController.getUserInfoPage);
 router.get('/working-time-info', adminController.getWorkingTimeInfoPage);
 router.get('/user-covid-info', adminController.getUserCovidInfoPage);
+router.get('/login', adminController.getLoginPage);
+router.get('/signup', adminController.getSignupPage);
 
 // post method route
 router.post('/checkin', adminController.postCheckinPage);
