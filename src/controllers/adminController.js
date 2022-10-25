@@ -5,9 +5,10 @@ exports.getCheckinPage = (req, res) => {
 };
 
 exports.postCheckinPage = (req, res, next) => {
-  const mytime = req.body.mytime;
-  console.log(mytime);
-  res.redirect('/checkin');
+  const workplace = req.body.workplace;
+  res.redirect('./main/working-time-info', {
+    workplace: workplace,
+  });
 };
 
 exports.getOnleavePage = (req, res) => {
