@@ -24,17 +24,14 @@
           <!-- workplace selector -->
           <div class="col-8">
             <label for="workplace" class="form-label">Nơi làm việc:</label>
-            <div class="input-group mb-3">
-              <select class="form-select" id="workplace">
-                <option value="company" selected>Công ty</option>
+            <form class="input-group mb-3">
+              <select class="form-select" name="workplace" id="workplace">
+                <option value="company">Công ty</option>
                 <option value="customer">Khách hàng</option>
                 <option value="home">Nhà</option>
               </select>
-            </div>
-          </div>
-          
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modal-checkin-success">Điểm danh</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modal-checkin-success">Điểm danh</button>
+            </form>
           </div>
         </div>
       </div>
@@ -46,20 +43,17 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">ĐIỂM DANH THÀNH CÔNG</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div class="mt-4 text-center">
+            <form action="/checkin" class="mt-4 text-center" method="POST">
               <h6>THÔNG TIN ĐIỂM DANH</h6>
               <p>Họ và tên: Nguyễn Văn A</p>
               <p>nơi làm việc: công ty</p>
               <p>Thời gian bắt đầu: 9:00</p>
               <p>Phép năm: 5 ngày</p>
               <p class="work-status-btn">Trạng thái: Đang làm việc</p>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+              <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Xác Nhận</button>
+            </form>
           </div>
         </div>
       </div>
