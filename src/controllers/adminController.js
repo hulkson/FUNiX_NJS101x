@@ -1,45 +1,47 @@
+const CheckinList = require('../models/checkinList');
+
 
 // checkin-checkout-onleave button
 exports.getCheckinPage = (req, res) => {
-   res.render("main/checkin");
+   res.render("./main/checkin");
 };
 
 exports.postCheckinPage = (req, res, next) => {
-  const workplace = req.body.workplace;
-  res.redirect('./main/working-time-info', {
-    workplace: workplace,
-  });
+  const checkin = new CheckinList(req.body.workplace);
+  checkin.save();
+  res.redirect('/working-time-info');
 };
-
 exports.getOnleavePage = (req, res) => {
-  res.render("main/onleave");
+  res.render("./main/onleave");
 };
 
 exports.getCheckoutPage = (req, res) => {
-  res.render("main/checkout");
+  res.render("./main/checkout");
 };
 
 exports.getCheckoutPage = (req, res) => {
-  res.render("main/checkout");
+  res.render("./main/checkout");
 };
 
 // navbar link page
 exports.getUserInfoPage = (req, res) => {
-  res.render("main/user-info");
+  res.render("./main/user-info");
 };
 
 exports.getWorkingTimeInfoPage = (req, res) => {
-  res.render("main/working-time-info");
+  const checkin = CheckinList.fetchAll();
+  console.log(checkin);
+  res.render("./main/working-time-info", {workplace: checkin[0].workplace});
 };
 
 exports.getUserCovidInfoPage = (req, res) => {
-  res.render("main/user-covid-info");
+  res.render("./main/user-covid-info");
 };
 
 exports.getLoginPage = (req, res) => {
-  res.render("main/login");
+  res.render("./main/login");
 };
 
 exports.getSignupPage = (req, res) => {
-  res.render("main/signup");
+  res.render("./main/signup");
 };
