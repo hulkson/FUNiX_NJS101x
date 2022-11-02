@@ -27,30 +27,6 @@ app.use(express.static(path.join(__dirname, "public")));
 //import routes
 app.use("/", adminRoutes);
 
-app.get('/', (req, res) => {
-  res.render('main/home');
-});
-
-// app.get('/login', (req, res) => {
-//   res.render('main/login');
-// });
-
-// app.get('/signup', (req, res) => {
-//   res.render('main/signup');
-// });
-
-// app.get('/user-info', (req, res) => {
-//   res.render('main/user-info');
-// });
-
-// app.get('/user-working-time', (req, res) => {
-//   res.render('main/user-working-time');
-// });
-
-// app.get('/user-covid-info', (req, res) => {
-//   res.render('main/user-covid-info');
-// });
-
 app.use(errorController.get404);
 
 // connect to database
