@@ -12,10 +12,10 @@
     <div class="container">
       <!-- User Info -->
       <div class="d-flex mt-5 justify-content-center align-items-center">
-        <img class="col-2" src="https://e7.pngegg.com/pngimages/96/836/png-clipart-elon-musk-sticker-chief-executive-telegram-musk-stick-hand-cartoon.png" alt="user-avatar">
+        <img class="col-2" src="<%=image%>" alt="<%=name%>">
         <div class="user-info m-5">
-          <h4>Họ Và Tên: Trịnh Văn Musk</h4>
-          <h4>Trạng Thái: Đang làm việc</h4>
+          <h4>Họ Và Tên: <%= name %></h4>
+          <h4>Trạng Thái: <%= status %></h4>
         </div>
       </div>
       <!-- button -->
@@ -30,12 +30,12 @@
       <!-- Post checkin-->
       <div class="collapse col-8 offset-2 mt-5" id="check-in">
         <div class="row">
-          <% if (true) { %>
-          <form action="/checkin" class="checkin-form text-center" method="POST">
+          <% if (status === 'true') { %>
+          <form action="/checkin" class="text-center" method="POST">
             <label class="col-xs-6 col-sm-4"> Chọn nơi làm việc:</label>
-            <select class="col-xs-6 col-sm-4" name="worplace" id="worplace">
+            <select class="col-xs-6 col-sm-4" name="workplace" id="workplace">
               <option id="Công Ty">Công Ty</option>
-              <option id="Khánh Hàng">Khánh Hàng</option>
+              <option id="Khánh Hàng">Khách Hàng</option>
               <option id="Nhà">Nhà</option>
             </select>
 
@@ -44,10 +44,10 @@
             <!-- Post Checkout-->
             <% }  else if (status === 'false') { %>
               <form action="/checkout" class="checkin-form" method="POST">
-                <label class="col-xs-6 col-sm-4 te" > Nơi làm việc</label>
-                <select class="col-xs-6 col-sm-4" name="worplace" id="worplace" disabled="disabled">
+                <label class="col-xs-6 col-sm-4 te" >Nơi làm việc</label>
+                <select class="col-xs-6 col-sm-4" name="workplace" id="workplace" disabled="disabled">
                   <option id="Công Ty">Công Ty</option>
-                  <option id="Khánh Hàng">Khánh Hàng</option>
+                  <option id="Khánh Hàng">Khách Hàng</option>
                   <option id="Nhà">Nhà</option>
                 </select>
               <button type="submit" class="btn btn-danger col-xs-12 col-sm-3 dangerous">Kết thúc</button>
@@ -67,26 +67,26 @@
             </tr>
           </thead>
           <tbody>
-            <% if (true) { %>
+            <% if (workHistory.length === 0) { %>
               <tr>
-                <td class="col-12 col-sm-4">---</td>
-                <td class="col-12 col-sm-2">---</td>
-                <td class="col-12 col-sm-2">---</td>
-                <td class="col-12 col-sm-2">---</td>
-                <td class="col-12 col-sm-2">---</td>
+                <td class="col-12 col-sm-4">***</td>
+                <td class="col-12 col-sm-2">***</td>
+                <td class="col-12 col-sm-2">***</td>
+                <td class="col-12 col-sm-2">***</td>
+                <td class="col-12 col-sm-2">***</td>
               </tr> 
             <%}
             else {
               let newDate = new Date();
-              let dateVal = newDate.toDateString().replace(/^\S+\s/,'')
+              let dateVal = newDate.toDateString().replace(/^\S+\s/,'');
               let date='';
               let checkinVal='';
               let checkoutVal='';
               let timeSub=0;
-              let timeLapse = 0;
-              let subTime = 0
-              let timeCount = 0
-              workHis.forEach(history => {
+              let totalTime = 00;
+              let subTime = 00;
+              let timeCount = 00;
+              workHistory.forEach(history => {
                 let checkDate = history.checkin.toDateString().replace(/^\S+\s/,'');
                 if (checkDate === dateVal){
                       if (history.checkin !== null){
@@ -98,20 +98,20 @@
                         timeSub = history.checkout - history.checkin
                         let minutes = Math.floor((timeSub / (1000 * 60)) % 60);
                         let hours = Math.floor((timeSub / (1000 * 60 * 60)) % 24);
-                        timeLapse = hours + ":" + minutes
+                        totalTime = hours + ":" + minutes
                         subTime += (history.checkout - history.checkin)
                       }
                       else {
-                        checkoutVal = 0;
-                        timeLapse = 0
+                        checkoutVal = 00;
+                        totalTime = 00;
                       }         
                 %>
-                <tr class="row">
+                <tr>
                   <td class="col-12 col-sm-4"><%= date %></td>
+                  <td class="col-12 col-sm-2"><%= history.workplace %></td>
                   <td class="col-12 col-sm-2"><%= checkinVal %></td>
                   <td class="col-12 col-sm-2"><%= checkoutVal %></td>
-                  <td class="col-12 col-sm-2"><%= timeLapse %></td>
-                  <td class="col-12 col-sm-2"><%= history.Space %></td>
+                  <td class="col-12 col-sm-2"><%= totalTime %></td>
                 </tr> 
               <% 
             }
@@ -120,24 +120,24 @@
             let hours = Math.floor((subTime/(1000*60*60))%24);
             timeCount = hours + ":" + minutes
             %>
-            <tr class="row">
+            <!-- <tr class="row">
               <th colspan="3">Total time in day</th>
               <td><%= timeCount%></td>
-            </tr>
+            </tr> -->
             <%
             }%>
             </tbody>
           </table>
         </div>
+
           <!-- onleave-form -->
-        <div class="collapse col-8 offset-2 mt-5" id="onleave-form">
+        <form action="/checkout" method="POST" class="collapse col-8 offset-2 mt-5" id="onleave-form">
           <div class="modal-content align-items-center">
             <h4 class="mt-4">BẢNG XIN NGHỈ PHÉP</h4>
   
             <div class="mt-4 text-center">
-              <h6>THÔNG TIN</h6>
-              <p>Họ và tên: Nguyễn Văn A</p>
-              <p>Ngày phép còn lại: 5 ngày</p>
+              <h5>Họ và tên: <%= name %></h5>
+              <p>Ngày phép còn lại: <b><%= annualLeave %> </b>ngày</p>
             </div>
             <!-- onleave-time -->
             <div class="col-8">
@@ -173,7 +173,7 @@
               <button type="submit" class="btn btn-primary">Đăng Ký</button>
             </div>
           </div>
-        </div>
+        </form>
     </div>
       
   </main>

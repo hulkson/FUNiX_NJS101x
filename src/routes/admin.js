@@ -5,9 +5,7 @@ const adminController = require('../controllers/adminController');
 const router = express.Router();
 
 // get homepage
-router.get('/', (req, res) => {
-    res.render('main/home');
-  });
+router.get('/', adminController.getApp);
 
 // navbar link page
 router.get('/user-info', adminController.getUserInfoPage);
@@ -18,6 +16,6 @@ router.get('/signup', adminController.getSignupPage);
 
 // post method route
 router.post('/checkin', adminController.postCheckin);
-// router.post('/checkin', adminController.postCheckout);
+router.post('/checkout', adminController.postCheckout);
 
 module.exports = router;
