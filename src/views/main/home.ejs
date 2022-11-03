@@ -69,11 +69,11 @@
           <tbody>
             <% if (workHistory.length === 0) { %>
               <tr>
-                <td class="col-12 col-sm-4">***</td>
-                <td class="col-12 col-sm-2">***</td>
-                <td class="col-12 col-sm-2">***</td>
-                <td class="col-12 col-sm-2">***</td>
-                <td class="col-12 col-sm-2">***</td>
+                <td class="col-12 col-sm-4">--</td>
+                <td class="col-12 col-sm-2">--</td>
+                <td class="col-12 col-sm-2">--</td>
+                <td class="col-12 col-sm-2">--</td>
+                <td class="col-12 col-sm-2">--</td>
               </tr> 
             <%}
             else {
@@ -83,18 +83,18 @@
               let checkinVal='';
               let checkoutVal='';
               let timeSub=0;
-              let totalTime = 00;
-              let subTime = 00;
-              let timeCount = 00;
+              let totalTime = 0;
+              let subTime = 0;
+              let timeCount = 0;
               workHistory.forEach(history => {
                 let checkDate = history.checkin.toDateString().replace(/^\S+\s/,'');
                 if (checkDate === dateVal){
-                      if (history.checkin !== null){
+                      if (history.checkin !== null) {
                         date = history.checkin.toDateString().replace(/^\S+\s/,'');
                         checkinVal= history.checkin.getHours().toString() + ":" + history.checkin.getMinutes().toString();
                       }
-                      if (history.checkout !== null){
-                        checkoutVal=history.checkout.getHours().toString() + ":" + history.checkout.getMinutes().toString();
+                      if (history.checkout !== null) {
+                        checkoutVal = history.checkout.getHours().toString() + ":" + history.checkout.getMinutes().toString();
                         timeSub = history.checkout - history.checkin
                         let minutes = Math.floor((timeSub / (1000 * 60)) % 60);
                         let hours = Math.floor((timeSub / (1000 * 60 * 60)) % 24);
@@ -102,8 +102,8 @@
                         subTime += (history.checkout - history.checkin)
                       }
                       else {
-                        checkoutVal = 00;
-                        totalTime = 00;
+                        checkoutVal = 0;
+                        totalTime = 0;
                       }         
                 %>
                 <tr>
@@ -140,7 +140,7 @@
                 <div class="mt-3 col-lg-6">
                     <label for="dateSelected">Chọn Ngày:</label>
                     <input id="dateSelected" name="dateSelected" class="form-control" type="date" />
-                    <!-- <span id="dateSelectedSelected"></span> -->
+                    <div><span class="validated text-danger"></span></div>
                 </div>
                 <div class="mt-3 col-lg-6">
                   <label for="timeSelected">Chọn Giờ:</label>
@@ -161,11 +161,11 @@
             <!-- onleave reason -->
             <div class="col-8">
               <label for="onleave-reason" class="form-label">Lý do:</label>
-              <textarea class="form-control" name="onleave-reason" id="onleave-reason" rows="8"></textarea>
+              <textarea class="form-control" name="onleaveReason" id="onleaveReason" rows="8"></textarea>
             </div>
             
             <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Đăng Ký</button>
+              <button onsubmit="return annualLeaveCheck()" type="submit" class="btn btn-primary">Đăng Ký</button>
             </div>
           </div>
         </form>
@@ -176,12 +176,13 @@
 <!-- ------------------------------------- -->
 
 <script>
-  $(document).ready(function () {
-    $('#datePick').multiDatesPicker();
-  });
+  // $(document).ready(function () {
+  //   $('#dateSelected').multiDatesPicker();
+  // });
 
   function annualLeaveCheck(){
     const datePick = document.querySelector('#dateSelected').value;
+    console.log(datePick);
     if (datePick === '') {
       document.querySelector('.validated').innerHTML='Vui lòng chọn ngày'
     }

@@ -84,6 +84,19 @@ exports.postUserInfoPage = (req, res) => {
 };
 
 exports.postOnleave = (req, res) => {
-  console.log(req.body);
-  res.redirect('/');
+  const annualValidate = req.body.dateSelected.split(',')
+  const annualRemain = req.user.annualLeave * 8 - annualValidate.length * req.body.timeSelected
+  annualValidate.forEach(annualCheck => {
+    annualCheck = new Date(annualCheck)
+      req.user.progress.annual.push({
+        annualDate: annualCheck,
+        annualTime: parseInt(req.body.timeSelected),
+        reason: req.body.onleaveReason
+      });
+    });
+    req.user.annualLeave = annualRemain / 8
+    req.user.save()
+    .then(() => {
+      res.redirect('/');
+    })
 };

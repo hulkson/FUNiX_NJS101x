@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //import routes
 app.use((req, res, next) => {
-  User.findById("63629bff61b52bc6a5ea396b")
+  User.findById("6363f348a2b173d6e8ecad87")
   .then(user => {
       req.user = user;
       next();
@@ -52,7 +52,7 @@ mongoose
              salaryScale: 1.0,
              startDate: "2021-1-1",
              department: "Công Ty",
-             annualLeave: 10,
+             annualLeave: 2,
              image: "https://e7.pngegg.com/pngimages/96/836/png-clipart-elon-musk-sticker-chief-executive-telegram-musk-stick-hand-cartoon.png",
              progress: [],
           });

@@ -15,12 +15,12 @@
          <form action="/user-info" class="m-5 col-sm-6 col-xs-12 col-6" method="POST">
             <h4 class="mt-5">Thông Tin Cá Nhân:</h4>
             <br>
-            <h6 id="user-id">User ID: <%= user._id %></h6>
-            <h6 id="user-name">Họ và Tên: <%= user.name %></h6>
-            <h6 id="user-dob">Ngày sinh: <%= user.doB %></h6>
+            <h6 id="user-id">User ID: <%= user._id.toString().toUpperCase() %></h6>
+            <h6 id="user-name">Họ và Tên: <%= user.name.toUpperCase() %></h6>
+            <h6 id="user-dob">Ngày Sinh: <%= user.doB %></h6>
             <h6 id="user-salaryScale">Salary Scale: <%= user.salaryScale %></h6>
-            <h6 id="user-startDate">Ngày bắt đầu: <%= user.startDate %></h6>
-            <h6 id="user-department">Nơi làm việc: <%= user.department %></h6>
+            <h6 id="user-startDate">Ngày Bắt Đầu: <%= user.startDate %></h6>
+            <h6 id="user-department">Nơi Làm Việc: <%= user.department %></h6>
             <h6 id="user-annualLeave">Phép Năm: <%= user.annualLeave %> Ngày</h6>
             <label for="imageUrl" class="form-label">Avatar URL</label>
             <input type="text" class="form-control" name="imageUrl" id="imageUrl">
