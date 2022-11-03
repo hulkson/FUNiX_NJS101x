@@ -28,21 +28,10 @@ exports.getApp = (req, res, next) => {
 }
 };
 
-exports.getOnleavePage = (req, res) => {
-  res.render("./main/onleave");
-};
-
-exports.getCheckoutPage = (req, res) => {
-  res.render("./main/checkout");
-};
-
-exports.getCheckoutPage = (req, res) => {
-  res.render("./main/checkout");
-};
-
 // navbar link page
 exports.getUserInfoPage = (req, res) => {
-  res.render("./main/user-info");
+  console.log(req.user);
+  res.render("./main/user-info", {user: req.user});
 };
 
 exports.getWorkingInfoPage = (req, res) => {
@@ -84,4 +73,17 @@ exports.postCheckout = (req, res, next) => {
     req.user.save().then(() => {  
         res.redirect('/');
     });
+};
+
+exports.postUserInfoPage = (req, res) => {
+  req.user.image = req.body.imageUrl;
+  req.user.save()
+  .then(()=> {
+    res.redirect('user-info');
+  })
+};
+
+exports.postOnleave = (req, res) => {
+  console.log(req.body);
+  res.redirect('/');
 };

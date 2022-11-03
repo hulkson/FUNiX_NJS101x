@@ -28,7 +28,6 @@ const userSchema = new Schema({
    },
    annualLeave: {
       type: Number,
-      required: true,
    },
    image: {
       type: String,

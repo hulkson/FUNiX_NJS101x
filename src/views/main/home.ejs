@@ -15,12 +15,12 @@
         <img class="col-2" src="<%=image%>" alt="<%=name%>">
         <div class="user-info m-5">
           <h4>Họ Và Tên: <%= name %></h4>
-          <h4>Trạng Thái: <%= status %></h4>
+          <h4>Trạng Thái: <%= status === 'true' ? 'Chưa điểm danh' : 'Đang làm việc'  %></h4>
         </div>
       </div>
       <!-- button -->
       <div class="d-flex mt-5 justify-content-center align-items-center">
-        <button class="btn btn-primary m-2" type="button" data-bs-toggle="collapse" data-bs-target="#check-in" aria-expanded="false" aria-controls="check-in">Điểm Danh</button>
+        <button class="btn btn-primary <%= status === 'true' ? 'btn-primary' : 'btn-success'  %> m-2" type="button" data-bs-toggle="collapse" data-bs-target="#check-in" aria-expanded="false" aria-controls="check-in"><%= status === 'true' ? 'Điểm Danh' : 'Kết Thúc'  %></button>
         <button class="btn btn-secondary m-2" type="button" data-bs-toggle="collapse" data-bs-target="#onleave-form" aria-expanded="false" aria-controls="onleave-form">Nghỉ Phép</button>
       </div>
     </div>
@@ -119,37 +119,32 @@
             let minutes = Math.floor((subTime/(1000*60))%60);
             let hours = Math.floor((subTime/(1000*60*60))%24);
             timeCount = hours + ":" + minutes
-            %>
-            <!-- <tr class="row">
-              <th colspan="3">Total time in day</th>
-              <td><%= timeCount%></td>
-            </tr> -->
-            <%
-            }%>
+            } %>
             </tbody>
           </table>
         </div>
 
           <!-- onleave-form -->
-        <form action="/checkout" method="POST" class="collapse col-8 offset-2 mt-5" id="onleave-form">
+        <form action="/onleave" method="POST" class="collapse col-8 offset-2 mt-5" id="onleave-form">
           <div class="modal-content align-items-center">
             <h4 class="mt-4">BẢNG XIN NGHỈ PHÉP</h4>
   
             <div class="mt-4 text-center">
               <h5>Họ và tên: <%= name %></h5>
               <p>Ngày phép còn lại: <b><%= annualLeave %> </b>ngày</p>
+              <span id="alert_annualLeave" class="validated text-danger"> </span>
             </div>
             <!-- onleave-time -->
             <div class="col-8">
               <div class="row justify-content-center">
                 <div class="mt-3 col-lg-6">
-                    <label for="startDate">Chọn Ngày:</label>
-                    <input id="startDate" class="form-control" type="date" />
-                    <span id="startDateSelected"></span>
+                    <label for="dateSelected">Chọn Ngày:</label>
+                    <input id="dateSelected" name="dateSelected" class="form-control" type="date" />
+                    <!-- <span id="dateSelectedSelected"></span> -->
                 </div>
                 <div class="mt-3 col-lg-6">
-                  <label for="startDate">Chọn Giờ:</label>
-                  <select class="form-select col-lg-6" id="onleave-time">
+                  <label for="timeSelected">Chọn Giờ:</label>
+                  <select class="form-select col-lg-6" name="timeSelected" id="timeSelected">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -166,7 +161,7 @@
             <!-- onleave reason -->
             <div class="col-8">
               <label for="onleave-reason" class="form-label">Lý do:</label>
-              <textarea class="form-control" id="onleave-reason" rows="8"></textarea>
+              <textarea class="form-control" name="onleave-reason" id="onleave-reason" rows="8"></textarea>
             </div>
             
             <div class="modal-footer">
@@ -179,5 +174,32 @@
   </main>
 
 <!-- ------------------------------------- -->
+
+<script>
+  $(document).ready(function () {
+    $('#datePick').multiDatesPicker();
+  });
+
+  function annualLeaveCheck(){
+    const datePick = document.querySelector('#dateSelected').value;
+    if (datePick === '') {
+      document.querySelector('.validated').innerHTML='Vui lòng chọn ngày'
+    }
+    else{
+      document.querySelector('.validated').innerHTML=''
+      const datePickArr = datePick.split(',');
+      const timeSelected = parseInt(document.querySelector('#timeSelected').value)
+      let timeSubmit = datePickArr.length * timeSelected
+      if (timeSubmit <= "<%= annualLeave %>"*8) {
+        document.querySelector('#annualSubmit').disabled=false
+        document.querySelector('#alert_annualLeave').innerHTML = ""
+      }
+      else{
+        document.querySelector('#annualSubmit').disabled=true
+        document.querySelector('#alert_annualLeave').innerHTML = "Số ngày phép không đủ"
+      }
+    }
+  }
+</script>
   <%- include('../layout/end.ejs') %>
 </body>

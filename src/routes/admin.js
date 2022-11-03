@@ -17,5 +17,7 @@ router.get('/signup', adminController.getSignupPage);
 // post method route
 router.post('/checkin', adminController.postCheckin);
 router.post('/checkout', adminController.postCheckout);
+router.post('/user-info', adminController.postUserInfoPage);
+router.post('/onleave', adminController.postOnleave);
 
 module.exports = router;
