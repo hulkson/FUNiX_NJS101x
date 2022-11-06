@@ -19,5 +19,7 @@ router.post('/checkin', adminController.postCheckin);
 router.post('/checkout', adminController.postCheckout);
 router.post('/user-info', adminController.postUserInfoPage);
 router.post('/onleave', adminController.postOnleave);
+router.post('/vaccine-info', adminController.postVaccineInfo);
+router.post('/temperature-info', adminController.postTemperatureInfo);
 
 module.exports = router;

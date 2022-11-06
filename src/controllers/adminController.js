@@ -1,5 +1,3 @@
-const User = require('../models/user');
-
 //get main app
 exports.getApp = (req, res, next) => {
   let workHistory = req.user.progress.workHistory;
@@ -11,8 +9,8 @@ exports.getApp = (req, res, next) => {
             image: req.user.image,
             workHistory: workHistory,
             status: req.user.progress.status,
-            totalTime:0,
-            annualLeave: '',
+            totalTime: 0,
+            annualLeave: req.user.annualLeave,
             today: today
         })
     }
@@ -22,7 +20,7 @@ exports.getApp = (req, res, next) => {
             image: req.user.image,
             workHistory: workHistory,
             status: req.user.progress.status,
-            annualLeave:req.user.annualLeave,
+            annualLeave: req.user.annualLeave,
             today: today
         })
 }
@@ -30,7 +28,6 @@ exports.getApp = (req, res, next) => {
 
 // navbar link page
 exports.getUserInfoPage = (req, res) => {
-  console.log(req.user);
   res.render("./main/user-info", {user: req.user});
 };
 
@@ -39,7 +36,7 @@ exports.getWorkingInfoPage = (req, res) => {
 };
 
 exports.getUserCovidInfoPage = (req, res) => {
-  res.render("./main/user-covid-info");
+  res.render("./main/user-covid-info", {user: req.user});
 };
 
 exports.getLoginPage = (req, res) => {
@@ -84,8 +81,8 @@ exports.postUserInfoPage = (req, res) => {
 };
 
 exports.postOnleave = (req, res) => {
-  const annualValidate = req.body.dateSelected.split(',')
-  const annualRemain = req.user.annualLeave * 8 - annualValidate.length * req.body.timeSelected
+  const annualValidate = req.body.dateSelected.split(',');
+  const annualRemain = req.user.annualLeave * 8 - annualValidate.length * req.body.timeSelected;
   annualValidate.forEach(annualCheck => {
     annualCheck = new Date(annualCheck)
       req.user.progress.annual.push({
@@ -99,4 +96,34 @@ exports.postOnleave = (req, res) => {
     .then(() => {
       res.redirect('/');
     })
+};
+
+exports.postVaccineInfo = (req, res) => {
+  const injectDate = req.body.injectDate;
+  const vaccineNumber = req.body.vaccineNumber;
+  const vaccineType = req.body.vaccineType;
+  req.user.vaccineInfo.push({
+    injectDate: injectDate,
+    vaccineNumber: vaccineNumber,
+    vaccineType: vaccineType,
+  });
+  req.user.save().then(() => {
+    res.redirect('/user-covid-info');
+  })
+};
+
+exports.postTemperatureInfo = (req, res) => {
+  const declareDate = req.body.declareDate;
+  const declareTime = req.body.declareTime;
+  const bodyTemperature = req.body.bodyTemperature;
+  const healthStatus = req.body.healthStatus;
+  req.user.bodyTemperatureInfo.push({
+    declareDate: declareDate,
+    declareTime: declareTime,
+    bodyTemperature: bodyTemperature,
+    healthStatus: healthStatus,
+  });
+  req.user.save().then(() => {
+    res.redirect('/user-covid-info');
+  })
 };

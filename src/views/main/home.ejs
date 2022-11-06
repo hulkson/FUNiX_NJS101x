@@ -131,20 +131,20 @@
   
             <div class="mt-4 text-center">
               <h5>Họ và tên: <%= name %></h5>
-              <p>Ngày phép còn lại: <b><%= annualLeave %> </b>ngày</p>
-              <span id="alert_annualLeave" class="validated text-danger"> </span>
+              <p id="annualLeaveRemain">Ngày phép còn lại: <b><%= annualLeave %></b> ngày</p>
             </div>
             <!-- onleave-time -->
             <div class="col-8">
               <div class="row justify-content-center">
                 <div class="mt-3 col-lg-6">
                     <label for="dateSelected">Chọn Ngày:</label>
-                    <input id="dateSelected" name="dateSelected" class="form-control" type="date" />
-                    <div><span class="validated text-danger"></span></div>
+                    <input id="dateSelected" name="dateSelected" class="form-control" type="date" onchange=annualLeaveCheck() />
+                    <div><span class="date-validated text-danger"></span></div>
                 </div>
                 <div class="mt-3 col-lg-6">
                   <label for="timeSelected">Chọn Giờ:</label>
-                  <select class="form-select col-lg-6" name="timeSelected" id="timeSelected">
+                  <select class="form-select col-lg-6" name="timeSelected" id="timeSelected" onchange=annualTimeCheck() >
+                    <option value="0">Chọn thời gian nghỉ</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -154,6 +154,7 @@
                     <option value="7">7</option>
                     <option value="8">8</option>
                   </select>
+                <span id="alert_annualLeave" class="validated text-danger"> </span>
                 </div>
             </div>
             </div>
@@ -165,7 +166,7 @@
             </div>
             
             <div class="modal-footer">
-              <button onsubmit="return annualLeaveCheck()" type="submit" class="btn btn-primary">Đăng Ký</button>
+              <button type="submit" class="btn btn-primary disabled" id="onleave-submit">Đăng Ký</button>
             </div>
           </div>
         </form>
@@ -176,31 +177,42 @@
 <!-- ------------------------------------- -->
 
 <script>
-  // $(document).ready(function () {
-  //   $('#dateSelected').multiDatesPicker();
-  // });
+  const submitButton = document.querySelector('#onleave-submit');
+  function annualLeaveCheck() {
+    const datePicked = document.querySelector('#dateSelected').value;
+    const timePicked = parseInt(document.querySelector('#timeSelected').value);
+    if (datePicked !== '' && timePicked != 0 && timePicked <= "<%= annualLeave %>" * 8) {
+      document.querySelector('.date-validated').innerHTML='';
+      submitButton.classList.remove('disabled');
+    }
+    else if (datePicked === '') {
+      document.querySelector('.date-validated').innerHTML='Vui lòng chọn ngày';
+      submitButton.classList.add('disabled');
+    }
+    else {
+      document.querySelector('.date-validated').innerHTML='';
+    }
+  };
 
-  function annualLeaveCheck(){
-    const datePick = document.querySelector('#dateSelected').value;
-    console.log(datePick);
-    if (datePick === '') {
-      document.querySelector('.validated').innerHTML='Vui lòng chọn ngày'
-    }
-    else{
-      document.querySelector('.validated').innerHTML=''
-      const datePickArr = datePick.split(',');
-      const timeSelected = parseInt(document.querySelector('#timeSelected').value)
-      let timeSubmit = datePickArr.length * timeSelected
-      if (timeSubmit <= "<%= annualLeave %>"*8) {
-        document.querySelector('#annualSubmit').disabled=false
-        document.querySelector('#alert_annualLeave').innerHTML = ""
+  function annualTimeCheck() {
+    const datePicked = document.querySelector('#dateSelected').value;
+    const timePicked = parseInt(document.querySelector('#timeSelected').value);
+      if (timePicked == 0) {
+        document.querySelector('#alert_annualLeave').innerHTML = "Vui lòng chọn giờ nghỉ";
+        submitButton.classList.add('disabled');
       }
-      else{
-        document.querySelector('#annualSubmit').disabled=true
-        document.querySelector('#alert_annualLeave').innerHTML = "Số ngày phép không đủ"
+      else if ( datePicked !== '' && timePicked <= "<%= annualLeave %>" * 8 ) {
+        document.querySelector('#alert_annualLeave').innerHTML = '';
+        submitButton.classList.remove('disabled');
       }
+      else if (timePicked > "<%= annualLeave %>" * 8) {
+        document.querySelector('#alert_annualLeave').innerHTML = "Số ngày phép không đủ";
+        submitButton.classList.add('disabled');
+      }
+      else {
+        document.querySelector('#alert_annualLeave').innerHTML = "";
     }
-  }
+  };
 </script>
   <%- include('../layout/end.ejs') %>
 </body>

@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //import routes
 app.use((req, res, next) => {
-  User.findById("6363f348a2b173d6e8ecad87")
+  User.findById("63679ceada443c1f5c7aff5f")
   .then(user => {
       req.user = user;
       next();
@@ -48,12 +48,14 @@ mongoose
           const user = new User({
              name: "Trịnh Văn Musk",
              email: "musk@mail.com",
-             doB: "1990-1-1",
+             doB: "1/1/1990",
              salaryScale: 1.0,
-             startDate: "2021-1-1",
+             startDate: "1/1/2022",
              department: "Công Ty",
              annualLeave: 2,
              image: "https://e7.pngegg.com/pngimages/96/836/png-clipart-elon-musk-sticker-chief-executive-telegram-musk-stick-hand-cartoon.png",
+             vaccineInfo: [],
+             bodyTemperatureInfo: [],
              progress: [],
           });
           user.save();

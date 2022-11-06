@@ -33,6 +33,42 @@ const userSchema = new Schema({
       type: String,
       required: true,
    },
+   vaccineInfo: [
+      {
+         injectDate: {
+            type: Date,
+            required: true,
+          },
+          vaccineNumber: {
+            type: String,
+            required: true,
+          },
+          vaccineType: {
+            type: String,
+            required: true,
+          }
+      }
+   ],
+   bodyTemperatureInfo: [
+      {
+         declareDate: {
+            type: Date,
+            required: true,
+          },
+          declareTime: {
+            type: String,
+            required: true,
+          },
+          bodyTemperature: {
+            type: Number,
+            required: true,
+          },
+          healthStatus: {
+            type: String,
+            required: true,
+          },
+      }
+   ],
    progress: {
       workHistory: [
          {
@@ -63,10 +99,6 @@ const userSchema = new Schema({
       status: {
          type: String,
          default: "true",
-      },
-      covid: {
-         type: mongoose.Schema.Types.ObjectId,
-         ref: "covidInfo",
       },
    },
 });
