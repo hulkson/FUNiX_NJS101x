@@ -98,7 +98,7 @@
                         timeSub = history.checkout - history.checkin
                         let minutes = Math.floor((timeSub / (1000 * 60)) % 60);
                         let hours = Math.floor((timeSub / (1000 * 60 * 60)) % 24);
-                        totalTime = hours + ":" + minutes
+                        totalTime = hours + ":" + minutes;
                         subTime += (history.checkout - history.checkin)
                       }
                       else {

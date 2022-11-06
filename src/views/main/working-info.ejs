@@ -11,17 +11,70 @@
 <main>
    <div class="container">
       <div class="row">
-         <div class="mb-3 col-6 offset-3">
-            <h4 class="mt-5">Thông Tin Giờ Làm:</h4>
-            <br>
-            <h6 id="user-worktime-date">Ngày: 2002/1/1</h6>
-            <h6 id="user-worktime-workPlace">Nơi Làm Việc: workplace</h6>
-            <h6 id="user-worktime-annualLeave">Phép Năm Đã Đăng Ký: 5 Ngày</h6>
-            <h6 id="user-worktime-startHour">Giờ Bắt Đầu: 9:00</h6>
-            <h6 id="user-worktime-endHour">Giờ Kết Thúc: 18:00</h6>
-            <h6 id="user-worktime-total">Tổng Giờ Làm: 8</h6>
-            <h6 id="user-salaryScale">Salary Scale: 1.0</h6>
+         <div class="nav nav-tabs" id="nav-tab" role="tablist" >
+            <% const tabName = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+           const getToDate = new Date();
+           const getMonthOfToDate = getToDate.getMonth();
+           for(let i = 0; i< tabName.length; i++) {
+            if(i !== getMonthOfToDate ){ %>
+               <p class="nav-link" id="<%=tabName[i]%>-tab" data-bs-toggle="tab" data-bs-target="#<%=tabName[i]%>" type="a" role="tab" aria-controls="<%=tabName[i]%>" aria-selected="false" onchange="eventForm(event)"><%=tabName[i]%></p>
+            <% } else { %>
+              <p class="nav-link active" id="<%=tabName[i]%>-tab" data-bs-toggle="tab" data-bs-target="#<%=tabName[i]%>" type="p" role="tab" aria-controls="<%=tabName[i]%>" aria-selected="true" onchange="eventForm(event)"><%=tabName[i]%>
+               </p>
+            <% }}  %>
          </div>
+         <table class="tab-content row" id="nav-tabContent" >
+            <tr class="row">
+               <th class="col-sm-12 col-md-2">Date</th>
+               <th class="col-sm-12 col-md-1">Checkin</th>
+               <th class="col-sm-12 col-md-1">Checkout</th>
+               <th class="col-sm-12 col-md-2">Nơi Làm Việc</th>
+               <th class="col-sm-12 col-md-2">TimeCount</th>
+               <th class="col-sm-12 col-md-2">Over Time</th>
+               <th class="col-sm-12 col-md-2">Annual Registed</th>
+            </tr>
+
+            <% if (user.progress.workHistory.length > 0) { %>
+               <% for (let workHis of user.progress.workHistory) { 
+                  let convertedDate = workHis.checkin.toDateString().replace(/^\S+\s/,'');
+                  let convertedCheckin = workHis.checkin.getHours().toString() + ":" + workHis.checkin.getMinutes().toString();
+                  <!-- let convertedCheckout = workHis.checkout.getHours().toString() + ":" + workHis.checkout.getMinutes().toString(); -->
+                  let timeSub = workHis.checkout - workHis.checkin;
+                  let minutes = Math.floor((timeSub / (1000 * 60)) % 60);
+                  let hours = Math.floor((timeSub / (1000 * 60 * 60)) % 24);
+                  let totalTime = hours + ":" + minutes;
+                  let subTime = 0;
+                  subTime + (workHis.checkout - workHis.checkin);
+                  %>
+               <tr class="row">
+                  <td class="col-sm-12 col-md-2"><%= convertedDate %></td>
+                  <td class="col-sm-12 col-md-1"><%= convertedCheckin %></td>
+                  <td class="col-sm-12 col-md-1">
+                     <% if (user.progress.workHistory.length > 0) { %>
+                        <% for (let workHis of user.progress.workHistory) { 
+                           if (workHis.checkout === null) { %>
+                              <%= 'Chưa checkout' %>
+                           <% } else {
+                              let convertedCheckout = workHis.checkout.getHours().toString() + ":" + workHis.checkout.getMinutes().toString(); %>
+                              <%= convertedCheckout %>
+                           <% } %>
+                     <% }} %>
+                   </td>
+                  <td class="col-sm-12 col-md-2"><%= workHis.workplace %></td>
+                  <td class="col-sm-12 col-md-2"><%= totalTime %></td>
+                  <td class="col-sm-12 col-md-2">
+                     <% let overTime = new String;
+                     if (subTime < 8*3600*1000) {
+                     overTime = 0
+                    } else {
+                     overTime = Math.floor(((subTime - 8*3600*1000) / (1000 * 60 * 60)) % 24)  + ":" +  Math.floor(((subTime-8*3600*1000)/(1000*60))%60)
+                    }%>
+                    <%= overTime %>
+                   </td>
+                  <td class="col-sm-12 col-md-2">annual time</td>
+               </tr>
+            <% }} %>
+         </table>
       </div>
    </div>
 </main>

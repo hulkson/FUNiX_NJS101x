@@ -32,7 +32,8 @@ exports.getUserInfoPage = (req, res) => {
 };
 
 exports.getWorkingInfoPage = (req, res) => {
-  res.render("./main/working-info");
+  console.log(req.user.progress.workHistory);
+  res.render("./main/working-info", {user: req.user});
 };
 
 exports.getUserCovidInfoPage = (req, res) => {
