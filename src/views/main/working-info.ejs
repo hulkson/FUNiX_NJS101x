@@ -34,46 +34,18 @@
                <th class="col-sm-12 col-md-2">Annual Registed</th>
             </tr>
 
-            <% if (user.progress.workHistory.length > 0) { %>
-               <% for (let workHis of user.progress.workHistory) { 
-                  let convertedDate = workHis.checkin.toDateString().replace(/^\S+\s/,'');
-                  let convertedCheckin = workHis.checkin.getHours().toString() + ":" + workHis.checkin.getMinutes().toString();
-                  <!-- let convertedCheckout = workHis.checkout.getHours().toString() + ":" + workHis.checkout.getMinutes().toString(); -->
-                  let timeSub = workHis.checkout - workHis.checkin;
-                  let minutes = Math.floor((timeSub / (1000 * 60)) % 60);
-                  let hours = Math.floor((timeSub / (1000 * 60 * 60)) % 24);
-                  let totalTime = hours + ":" + minutes;
-                  let subTime = 0;
-                  subTime + (workHis.checkout - workHis.checkin);
-                  %>
-               <tr class="row">
-                  <td class="col-sm-12 col-md-2"><%= convertedDate %></td>
-                  <td class="col-sm-12 col-md-1"><%= convertedCheckin %></td>
-                  <td class="col-sm-12 col-md-1">
-                     <% if (user.progress.workHistory.length > 0) { %>
-                        <% for (let workHis of user.progress.workHistory) { 
-                           if (workHis.checkout === null) { %>
-                              <%= 'Chưa checkout' %>
-                           <% } else {
-                              let convertedCheckout = workHis.checkout.getHours().toString() + ":" + workHis.checkout.getMinutes().toString(); %>
-                              <%= convertedCheckout %>
-                           <% } %>
-                     <% }} %>
-                   </td>
-                  <td class="col-sm-12 col-md-2"><%= workHis.workplace %></td>
-                  <td class="col-sm-12 col-md-2"><%= totalTime %></td>
-                  <td class="col-sm-12 col-md-2">
-                     <% let overTime = new String;
-                     if (subTime < 8*3600*1000) {
-                     overTime = 0
-                    } else {
-                     overTime = Math.floor(((subTime - 8*3600*1000) / (1000 * 60 * 60)) % 24)  + ":" +  Math.floor(((subTime-8*3600*1000)/(1000*60))%60)
-                    }%>
-                    <%= overTime %>
-                   </td>
-                  <td class="col-sm-12 col-md-2">annual time</td>
-               </tr>
-            <% }} %>
+            <% if (workHistories.length > 0) { %>
+               <% workHistories.forEach( workHistory => { %>
+                  <tr class="row">
+                     <td class="col-sm-12 col-md-2"><%= workHistory.date %></td>
+                     <td class="col-sm-12 col-md-1">
+
+                     </td>
+                  
+                   <td class="col-sm-12 col-md-2"> <%= workHistory.annual %> </td>
+               <% })
+            } %>
+            </tr>
          </table>
       </div>
    </div>

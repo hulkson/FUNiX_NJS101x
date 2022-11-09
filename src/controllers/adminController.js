@@ -32,8 +32,70 @@ exports.getUserInfoPage = (req, res) => {
 };
 
 exports.getWorkingInfoPage = (req, res) => {
-  console.log(req.user.progress.workHistory);
-  res.render("./main/working-info", {user: req.user});
+    const workHistories= new Array;
+        //create Date list
+        let tempDate = []
+        for(let i =0; i<req.user.progress.workHistory.length; i++){
+            let date = req.user.progress.workHistory[i].checkin.toDateString().replace(/^\S+\s/,'')
+            tempDate.push(date)
+        }
+        for (let i = 0; i<req.user.progress.annual.length; i++){
+            let date = new Date(req.user.progress.annual[i].annualDate)
+            tempDate.push(date.toDateString().replace(/^\S+\s/,''))
+        }
+        let dateLog = [...new Set(tempDate)]
+        //create Date List
+        //create workHistory Log
+        let tempWorkHis = []
+        let t = []
+
+        for (let i=0; i< req.user.progress.workHistory.length-1; i++){
+            if(req.user.progress.workHistory[i+1].checkin.toDateString().replace(/^\S+\s/,'') === req.user.progress.workHistory[i].checkin.toDateString().replace(/^\S+\s/,'')){
+                t.push(req.user.progress.workHistory[i])
+            }
+            else {
+                t.push(req.user.progress.workHistory[i])
+                tempWorkHis.push(t)
+                t=[]
+            }
+
+        }
+        if ( req.user.progress.workHistory[req.user.progress.workHistory.length-1].checkin.toDateString().replace(/^\S+\s/,'')  === req.user.progress.workHistory[req.user.progress.workHistory.length-2].checkin.toDateString().replace(/^\S+\s/,'')){
+            t.push(req.user.progress.workHistory[req.user.progress.workHistory.length-1])
+        }
+        else {
+            t=[req.user.progress.workHistory[req.user.progress.workHistory.length-1]]
+        }
+        tempWorkHis.push(t)
+
+                //create workHistory Log
+
+        for(let i=0; i< dateLog.length;i++){
+            let dateValue = dateLog[i];
+            let workHis = new Array
+            let annual = 0
+            tempWorkHis.forEach(tmp => {
+                if (tmp[0].checkin.toDateString().replace(/^\S+\s/,'')=== dateValue){
+                    workHis = tmp
+                }
+            })
+            req.user.progress.annual.forEach(tp=>{
+                let date = new Date(tp.annualDate)
+                if(date.toDateString().replace(/^\S+\s/,'') === dateValue){
+                    annual = tp.annualTime
+                }
+            })
+            let j = {date: dateValue, workHis: workHis, annual: annual}
+            workHistories.push(j)
+            
+        }
+        const array = workHistories.sort((a,b)=> {
+            a.annual-b.annual
+        })
+    res.render('./main/working-info', {
+        user:req.user,
+        workHistories : workHistories, 
+    })
 };
 
 exports.getUserCovidInfoPage = (req, res) => {
