@@ -9,45 +9,312 @@
 <%- include('../layout/navbar.ejs') %>
 <!-- ------------------------------------- -->
 <main>
-   <div class="container">
-      <div class="row">
-         <div class="nav nav-tabs" id="nav-tab" role="tablist" >
-            <% const tabName = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-           const getToDate = new Date();
-           const getMonthOfToDate = getToDate.getMonth();
-           for(let i = 0; i< tabName.length; i++) {
-            if(i !== getMonthOfToDate ){ %>
-               <p class="nav-link" id="<%=tabName[i]%>-tab" data-bs-toggle="tab" data-bs-target="#<%=tabName[i]%>" type="a" role="tab" aria-controls="<%=tabName[i]%>" aria-selected="false" onchange="eventForm(event)"><%=tabName[i]%></p>
+  <nav>
+      <div class="nav nav-tabs" id="nav-tab" role="tablist" >
+         <% 
+         const tabName = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+         const getToDate = new Date()
+         const getMonthOfToDate = getToDate.getMonth()
+         for(let i = 0; i < tabName.length; i++) {
+            if(i !== getMonthOfToDate) { %>
+               <p class="nav-link btn" id="<%= tabName[i] %> - tab" data-bs-toggle="tab" data-bs-target="#<%= tabName[i] %>" type="a" role="tab" aria-controls="<%= tabName[i] %>" aria-selected="false" onchange="eventForm(event)"><%= tabName[i] %></p>
+      
             <% } else { %>
-              <p class="nav-link active" id="<%=tabName[i]%>-tab" data-bs-toggle="tab" data-bs-target="#<%=tabName[i]%>" type="p" role="tab" aria-controls="<%=tabName[i]%>" aria-selected="true" onchange="eventForm(event)"><%=tabName[i]%>
-               </p>
-            <% }}  %>
-         </div>
-         <table class="tab-content row" id="nav-tabContent" >
+               <p class="nav-link btn active" id="<%= tabName[i] %> - tab" data-bs-toggle="tab" data-bs-target="#<%= tabName[i] %>" type="p" role="tab" aria-controls="<%=tabName[i]%>" aria-selected="true" onchange="eventForm(event)"><%= tabName[i] %></p>
+            <% }} %>
+      </div>
+  </nav>
+  <div class="col-8 offset-2 mt-5">
+      <table class="tab-content table table-striped table-hover" id="nav-tabContent" >
+         <thead>
             <tr class="row">
                <th class="col-sm-12 col-md-2">Date</th>
                <th class="col-sm-12 col-md-1">Checkin</th>
                <th class="col-sm-12 col-md-1">Checkout</th>
                <th class="col-sm-12 col-md-2">Nơi Làm Việc</th>
-               <th class="col-sm-12 col-md-2">TimeCount</th>
+               <th class="col-sm-12 col-md-2">Total Time</th>
                <th class="col-sm-12 col-md-2">Over Time</th>
                <th class="col-sm-12 col-md-2">Annual Registed</th>
             </tr>
-
-            <% if (workHistories.length > 0) { %>
-               <% workHistories.forEach( workHistory => { %>
+         </thead>
+         <%  for(let i = 0; i < tabName.length; i++) {
+            if (i !== getMonthOfToDate ) { %>
+               <tbody class="tab-pane fade" id="<%=tabName[i]%>" role="tabpanel" aria-labelledby="<%=tabName[i]%>-tab">
                   <tr class="row">
-                     <td class="col-sm-12 col-md-2"><%= workHistory.date %></td>
-                     <td class="col-sm-12 col-md-1">
-
+                     <% workHistories.forEach(workHistory => {
+                        let x = new Date(workHistory.date)
+                        if ( x.getMonth() === i) { %>
+                           <td class="col-sm-12 col-md-2"><%= workHistory.date %></td>
+                           <!-- check in col -->
+                           <td class="col-sm-12 col-md-1">
+                              <% if (workHistory.workHis.length === 0) { %>
+                                ---
+                              <% } else {
+                                 workHistory.workHis.forEach(workLog => {
+                                    let checkinTime = workLog.checkin.getHours() + ":" + workLog.checkin.getMinutes() %>
+                                    <%= checkinTime %>
+                                    <br>
+                                 <% })
+                              } %>
+                           </td>
+                           <!-- check out col -->
+                           <td class="col-sm-12 col-md-1">
+                              <% if (workHistory.workHis.length === 0) { %>
+                                ---
+                              <% } else {
+                                workHistory.workHis.forEach(workLog => {
+                                 if (workLog.checkout === null) { %>
+                                    <%= '--:--' %>
+                                 <% } else {
+                                    let checkoutTime = workLog.checkout.getHours() + ":" + workLog.checkout.getMinutes() %>
+                                    <%= checkoutTime %>
+                                    <br>
+                                 <% }
+                              })} %>
+                           </td>
+                           <!-- workplace col -->
+                           <td class="col-sm-12 col-md-2">
+                              <% if (workHistory.workHis.length === 0) { %>
+                                ---
+                              <% } else {
+                                 workHistory.workHis.forEach(workLog=> { %>
+                                 <%= workLog.workplace %>
+                                 <br>
+                              <% }) } %>
+                            </td>
+                            <!-- total time col -->
+                            <td class="col-sm-12 col-md-2">
+                              <% let subTime = 0;
+                              let totalTime = new String;
+                              workHistory.workHis.forEach(workLog => {
+                                 subTime += workLog.checkout - workLog.checkin
+                              })
+                              totalTime = Math.floor((subTime / (1000 * 60 * 60)) % 24)  + ":" +  Math.floor((subTime / (1000 * 60)) % 60) %>
+                              <%= totalTime %>
+                            </td>
+                            <!-- over time col -->
+                            <td class="col-sm-12 col-md-2">
+                              <% let overTime = new String;
+                              if ( subTime < 8*3600*1000 ) {
+                                 overTime = 0
+                              } else {
+                                 overTime = Math.floor(((subTime - 8*3600*1000) / (1000 * 60 * 60)) % 24)  + ":" +  Math.floor(((subTime-8*3600*1000)/(1000*60))%60)
+                              } %>
+                             <%= overTime %>
+                           </td>
+                           <!-- annual leeave col -->
+                           <td class="col-sm-12 col-md-2">
+                              <%= workHistory.annual / 8 %>
+                          </td>
+                        <% } %>
+                     <% }) %>
+                  </tr>
+                  <tr class="row">
+                     <th class="col-sm-12 col-md-6"> Total Time: </th>
+                     <td class="col-sm-12 col-md-6">
+                     <% let completeTimeInMonth = 0
+                     let inCompleteTimeInMonth = 0
+                     let timeAnnualInMonth = 0
+                     let overTimeInMonth = 0
+                     workHistories.forEach(workHistory => {
+                        let x = new Date(workHistory.date);
+                        let completeTimeInDate = 0;
+                        if ( x.getMonth() === i) { 
+                           workHistory.workHis.forEach(workLog => {
+                           if (workLog.checkout === null) {
+                              completeTimeInDate += 0
+                           }
+                           else {
+                              completeTimeInDate += workLog.checkout-workLog.checkin
+                           }
+                        });
+                        if (completeTimeInDate < 8*3600*1000) {
+                           inCompleteTimeInMonth += 8*3600*1000 - completeTimeInDate
+                        }
+                        else {
+                           overTimeInMonth += completeTimeInDate - 8*3600*1000
+                        }
+                        completeTimeInMonth += completeTimeInDate
+                        timeAnnualInMonth += workHistory.annual*3600*1000
+                     }}) %>
+                     <%= Math.floor(completeTimeInMonth / (1000 * 60 * 60))  + ":" +  Math.floor((completeTimeInMonth%3600000)/60000) %>
                      </td>
-                  
-                   <td class="col-sm-12 col-md-2"> <%= workHistory.annual %> </td>
-               <% })
-            } %>
-            </tr>
-         </table>
-      </div>
+                     <tr class="row">
+                        <th class="col-sm-12 col-md-6"> Total over Time </th>
+                        <td class="col-sm-12 col-md-6">
+                           <%= Math.floor(overTimeInMonth / (1000 * 60 * 60))  + ":" +  Math.floor((overTimeInMonth%3600000)/60000) %>
+                        </td>
+                     </tr>
+                  </tr>
+                  <tr class="row">
+                     <th class="col-sm-12 col-md-6">Total Annual time</th>
+                     <td class="col-sm-12 col-md-6">
+                        <%= Math.floor(timeAnnualInMonth / (1000 * 60 * 60))  + ":" +  Math.floor((timeAnnualInMonth%3600000)/60000) %>
+                     </td>
+                  </tr>
+                  <tr class="row">
+                     <th class="col-sm-12 col-md-6"> Total incomplete time </th>
+                     <td class="col-sm-12 col-md-6">
+                        <%= Math.floor(inCompleteTimeInMonth / (1000 * 60 * 60))  + ":" +  Math.floor((inCompleteTimeInMonth%3600000)/60000) %>
+                     </td>
+                  </tr>
+                  <tr class="row">
+                     <th class="col-sm-12 col-md-6"> Salary Formular </th>
+                     <td class="col-sm-12 col-md-6">
+                        <%=user.salaryScale + " * " + '3000000' + " + (" + (Math.floor(overTimeInMonth / (1000 * 60 * 60))  + ":" +  Math.floor((overTimeInMonth%3600000)/60000)) + " - " + (Math.floor(inCompleteTimeInMonth / (1000 * 60 * 60))  + ":" +  Math.floor((inCompleteTimeInMonth % 3600000) / 60000)) + " + " + (Math.floor(timeAnnualInMonth / (1000 * 60 * 60))  + ":" +  Math.floor((timeAnnualInMonth % 3600000) / 60000)) +")" + " * " + "200000" %>
+                     </td>
+                  </tr>
+                  <tr class="row">
+                     <th class="col-sm-12 col-md-6"> Salary </th>
+                     <td class="col-sm-12 col-md-6">
+                        <%= Math.floor(user.salaryScale * 3000000 + ((overTimeInMonth - inCompleteTimeInMonth + timeAnnualInMonth)/(1000*3600)) * 200000) + '   VND' %>
+                     </td>
+                  </tr>
+            <% } else { %>
+               <tbody class="tab-pane fade show active" id="<%= tabName[i] %>" role="tabpanel" aria-labelledby="<%= tabName[i] %> - tab">
+                  <tr class="row">
+                     <% workHistories.forEach(workHistory => {
+                        let x = new Date(workHistory.date)
+                        if (x.getMonth() === i) { %>
+                           <td class="col-sm-12 col-md-2"><%= workHistory.date %></td>
+                           <!-- check in col -->
+                           <td class="col-sm-12 col-md-1">
+                              <% if (workHistory.workHis.length === 0) { %>
+                              ---
+                              <% } else { %>
+                                 <% workHistory.workHis.forEach(workLog => {
+                                    let checkinTime = workLog.checkin.getHours() + ":" + workLog.checkin.getMinutes() %>
+                                    <%= checkinTime %>
+                                    <br>
+                                 <% })
+                              } %>
+                          </td>
+                          <!-- checkout col -->
+                          <td class="col-sm-12 col-md-1">
+                              <% if (workHistory.workHis.length === 0) { %>
+                              ---
+                              <% } else {
+                                 workHistory.workHis.forEach(workLog => {
+                                    if (workLog.checkout === null) { %>
+                                       <%= '--:--' %>
+                                    <% } else {
+                                       let checkoutTime = workLog.checkout.getHours() + ":" + workLog.checkout.getMinutes()%>
+                                       <%= checkoutTime %>
+                                       <br>
+                                    <% }
+                                 })} %>
+                           </td>
+                           <!-- workplace col -->
+                           <td class="col-sm-12 col-md-2">
+                              <% if (workHistory.workHis.length === 0) { %>
+                                 ---
+                              <% } else {
+                                 workHistory.workHis.forEach(workLog => { %>
+                                    <%= workLog.workplace %>
+                                    <br>
+                              <% })} %>
+                            </td>
+                            <!-- total time -->
+                            <td class="col-sm-12 col-md-2">
+                              <% let subTime = 0;
+                              let totalTime = new String;
+                              workHistory.workHis.forEach(workLog => {
+                                 if (workLog.checkout === null) {
+                                    totalTime = 'Chưa kết thúc'
+                                 }
+                                 else {
+                                    subTime+=workLog.checkout - workLog.checkin
+                                    totalTime = Math.floor((subTime / (1000 * 60 * 60)) % 24)  + ":" +  Math.floor((subTime / (1000 * 60)) % 60)
+                                 }
+                              }) %>
+                              <%= totalTime %>
+                            </td>
+                           <!-- over time col -->
+                           <td class="col-sm-12 col-md-2">
+                              <% let overTime = new String;
+                              if (subTime < 8*3600*1000) {
+                                 overTime = 0
+                              } else {
+                                 overTime = Math.floor(((subTime - 8*3600*1000) / (1000 * 60 * 60)) % 24)  + ":" +  Math.floor(((subTime-8*3600*1000)/(1000*60))%60)
+                              } %>
+                              <%= overTime %>
+                            </td>
+                            <!-- annual registed -->
+                           <td class="col-sm-12 col-md-2">
+                              <%= workHistory.annual / 8 %>
+                           </td>
+                        <!-- end table data row -->
+                        <% } %>
+                     <!-- end workHistories loop -->
+                     <% }) %>
+                  <!-- end main row -->
+                  </tr>
+               <!-- calculate row -->
+               <tr class="row">
+                  <th class="col-sm-12 col-md-6"> Total Time: </th>
+                  <td class="col-sm-12 col-md-6">
+                  <% let completeTimeInMonth = 0
+                  let inCompleteTimeInMonth = 0
+                  let timeAnnualInMonth = 0
+                  let overTimeInMonth = 0
+                  workHistories.forEach(workHistory => {
+                     let x = new Date(workHistory.date);
+                     let completeTimeInDate = 0;
+                     if ( x.getMonth() === i) { 
+                        workHistory.workHis.forEach(workLog => {
+                        if (workLog.checkout === null) {
+                           completeTimeInDate += 0
+                        }
+                        else {
+                           completeTimeInDate += workLog.checkout-workLog.checkin
+                        }
+                     });
+                     if (completeTimeInDate < 8*3600*1000) {
+                        inCompleteTimeInMonth += 8*3600*1000 - completeTimeInDate
+                     }
+                     else {
+                        overTimeInMonth += completeTimeInDate - 8*3600*1000
+                     }
+                     completeTimeInMonth += completeTimeInDate
+                     timeAnnualInMonth += workHistory.annual*3600*1000
+                  }}) %>
+                  <%= Math.floor(completeTimeInMonth / (1000 * 60 * 60))  + ":" +  Math.floor((completeTimeInMonth%3600000)/60000) %>
+                  </td>
+                  <tr class="row">
+                     <th class="col-sm-12 col-md-6"> Total over Time </th>
+                     <td class="col-sm-12 col-md-6">
+                        <%= Math.floor(overTimeInMonth / (1000 * 60 * 60))  + ":" +  Math.floor((overTimeInMonth%3600000)/60000) %>
+                     </td>
+                  </tr>
+                  <tr class="row">
+                     <th class="col-sm-12 col-md-6">Total Annual time</th>
+                     <td class="col-sm-12 col-md-6">
+                        <%= Math.floor(timeAnnualInMonth / (1000 * 60 * 60))  + ":" +  Math.floor((timeAnnualInMonth%3600000)/60000) %>
+                     </td>
+                  </tr>
+                  <tr class="row">
+                     <th class="col-sm-12 col-md-6"> Total incomplete time </th>
+                     <td class="col-sm-12 col-md-6">
+                        <%= Math.floor(inCompleteTimeInMonth / (1000 * 60 * 60))  + ":" +  Math.floor((inCompleteTimeInMonth%3600000)/60000) %>
+                     </td>
+                  </tr>
+                  <tr class="row">
+                     <th class="col-sm-12 col-md-6"> Salary Formular </th>
+                     <td class="col-sm-12 col-md-6">
+                        <%=user.salaryScale + " * " + '3000000' + " + (" + (Math.floor(overTimeInMonth / (1000 * 60 * 60))  + ":" +  Math.floor((overTimeInMonth%3600000)/60000)) + " - " + (Math.floor(inCompleteTimeInMonth / (1000 * 60 * 60))  + ":" +  Math.floor((inCompleteTimeInMonth % 3600000) / 60000)) + " + " + (Math.floor(timeAnnualInMonth / (1000 * 60 * 60))  + ":" +  Math.floor((timeAnnualInMonth % 3600000) / 60000)) +")" + " * " + "200000" %>
+                     </td>
+                  </tr>
+                  <tr class="row">
+                     <th class="col-sm-12 col-md-6"> Salary </th>
+                     <td class="col-sm-12 col-md-6">
+                        <%= Math.floor(user.salaryScale * 3000000 + ((overTimeInMonth - inCompleteTimeInMonth + timeAnnualInMonth)/(1000*3600)) * 200000) + '   VND' %>
+                     </td>
+                  </tr>
+               </tr>
+            <% } %>
+         <% } %>
+         </tbody>
+      </table>
    </div>
 </main>
 
