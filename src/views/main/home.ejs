@@ -64,7 +64,7 @@
               <th scope="col">Workplace</th>
               <th scope="col">Checkin</th>
               <th scope="col">Checkout</th>
-              <th scope="col">Total Time</th>
+              <th scope="col">Work Time</th>
             </tr>
           </thead>
           <tbody>
@@ -77,51 +77,35 @@
                 <td class="col-12 col-sm-2">--</td>
                 <td class="col-12 col-sm-2">--</td>
               </tr> 
-            <%}
-            else {
-              let newDate = new Date();
-              let dateVal = newDate.toDateString().replace(/^\S+\s/,'');
-              let date='';
-              let checkinVal='';
-              let checkoutVal='';
-              let timeSub=0;
-              let totalTime = 0;
-              let subTime = 0;
-              let timeCount = 0;
-              workHistory.forEach(history => {
-                let checkDate = history.checkin.toDateString().replace(/^\S+\s/,'');
-                if (checkDate === dateVal){
-                      if (history.checkin !== null) {
-                        date = history.checkin.toDateString().replace(/^\S+\s/,'');
-                        checkinVal= history.checkin.getHours().toString() + ":" + history.checkin.getMinutes().toString();
-                      }
-                      if (history.checkout !== null) {
-                        checkoutVal = history.checkout.getHours().toString() + ":" + history.checkout.getMinutes().toString();
-                        timeSub = history.checkout - history.checkin
-                        let minutes = Math.floor((timeSub / (1000 * 60)) % 60);
-                        let hours = Math.floor((timeSub / (1000 * 60 * 60)) % 24);
-                        totalTime = hours + ":" + minutes;
-                        subTime += (history.checkout - history.checkin)
-                      }
-                      else {
-                        checkoutVal = 0;
-                        totalTime = 0;
-                      }         
-                %>
+            <% }
+            else { 
+              workHistory.forEach( history => { %>
                 <tr>
-                  <td class="col-12 col-sm-4"><%= date %></td>
+                  <td class="col-12 col-sm-4"><%= history.checkin.toDateString().replace(/^\S+\s/,'') %></td>
                   <td class="col-12 col-sm-2"><%= history.workplace %></td>
-                  <td class="col-12 col-sm-2"><%= checkinVal %></td>
-                  <td class="col-12 col-sm-2"><%= checkoutVal %></td>
-                  <td class="col-12 col-sm-2"><%= totalTime %></td>
+                  <td class="col-12 col-sm-2"><%= history.checkin.getHours().toString() + ":" + history.checkin.getMinutes().toString() %></td>
+                  <td class="col-12 col-sm-2">
+                    <% if (history.checkout === null) { %>
+                      <%= '--:--' %>
+                    <% } else { %>
+                      <%= history.checkout.getHours().toString() + ":" + history.checkout.getMinutes().toString(); %>
+                    <% } %>
+                  </td>
+                  <td class="col-12 col-sm-2">
+                    <% if (history.checkout === null) { %>
+                      <%= '--:--' %>
+                    <% } else {
+                      const workTime = history.checkout.getTime() - history.checkin.getTime();
+                      let workTimeSeconds = Math.floor(workTime / 1000);
+                      let workTimeMinutes = Math.floor(workTimeSeconds / 60);
+                      let workTimeHours = Math.floor(workTimeMinutes / 60);
+                      workTimeMinutes = workTimeMinutes % 60; %>
+                      <%= history.checkout === null ? "--:--" : workTimeHours + ":" + workTimeMinutes %>
+                    <% } %>
+                  </td>
                 </tr> 
-              <% 
-            }
-            })
-            let minutes = Math.floor((subTime/(1000*60))%60);
-            let hours = Math.floor((subTime/(1000*60*60))%24);
-            timeCount = hours + ":" + minutes
-            } %>
+              <% }) %>
+            <% } %>
             </tbody>
           </table>
         </div>
