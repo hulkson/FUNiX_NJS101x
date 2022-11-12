@@ -12,15 +12,15 @@
     <div class="container">
       <!-- User Info -->
       <div class="d-flex mt-5 justify-content-center align-items-center">
-        <img class="col-2" src="<%=image%>" alt="<%=name%>">
+        <img class="col-2" src="<%= user.image %>" alt="<%= user.name %>">
         <div class="user-info m-5">
-          <h4>Họ Và Tên: <%= name %></h4>
-          <h4>Trạng Thái: <%= status === 'true' ? 'Chưa điểm danh' : 'Đang làm việc'  %></h4>
+          <h4>Họ Và Tên: <%= user.name %></h4>
+          <h4>Trạng Thái: <%= user.progress.status === 'true' ? 'Chưa điểm danh' : 'Đang làm việc'  %></h4>
         </div>
       </div>
       <!-- button -->
       <div class="d-flex mt-5 justify-content-center align-items-center">
-        <button class="btn btn-primary <%= status === 'true' ? 'btn-primary' : 'btn-success'  %> m-2" type="button" data-bs-toggle="collapse" data-bs-target="#check-in" aria-expanded="false" aria-controls="check-in"><%= status === 'true' ? 'Điểm Danh' : 'Kết Thúc'  %></button>
+        <button class="btn btn-primary <%= user.progress.status === 'true' ? 'btn-primary' : 'btn-success'  %> m-2" type="button" data-bs-toggle="collapse" data-bs-target="#check-in" aria-expanded="false" aria-controls="check-in"><%= user.progress.status === 'true' ? 'Điểm Danh' : 'Kết Thúc'  %></button>
         <button class="btn btn-secondary m-2" type="button" data-bs-toggle="collapse" data-bs-target="#onleave-form" aria-expanded="false" aria-controls="onleave-form">Nghỉ Phép</button>
       </div>
     </div>
@@ -30,6 +30,7 @@
       <!-- Post checkin-->
       <div class="collapse col-8 offset-2 mt-5" id="check-in">
         <div class="row">
+          <% const status = user.progress.status %>
           <% if (status === 'true') { %>
           <form action="/checkin" class="text-center" method="POST">
             <label class="col-xs-6 col-sm-4"> Chọn nơi làm việc:</label>
@@ -67,6 +68,7 @@
             </tr>
           </thead>
           <tbody>
+            <% const workHistory = user.progress.workHistory %>
             <% if (workHistory.length === 0) { %>
               <tr>
                 <td class="col-12 col-sm-4">--</td>
@@ -130,8 +132,8 @@
             <h4 class="mt-4">BẢNG XIN NGHỈ PHÉP</h4>
   
             <div class="mt-4 text-center">
-              <h5>Họ và tên: <%= name %></h5>
-              <p id="annualLeaveRemain">Ngày phép còn lại: <b><%= annualLeave %></b> ngày</p>
+              <h5>Họ và tên: <%= user.name %></h5>
+              <p id="annualLeaveRemain">Ngày phép còn lại: <b><%= user.annualLeave %></b> ngày</p>
             </div>
             <!-- onleave-time -->
             <div class="col-8">
@@ -181,7 +183,7 @@
   function annualLeaveCheck() {
     const datePicked = document.querySelector('#dateSelected').value;
     const timePicked = parseInt(document.querySelector('#timeSelected').value);
-    if (datePicked !== '' && timePicked != 0 && timePicked <= "<%= annualLeave %>" * 8) {
+    if (datePicked !== '' && timePicked != 0 && timePicked <= "<%= user.annualLeave %>" * 8) {
       document.querySelector('.date-validated').innerHTML='';
       submitButton.classList.remove('disabled');
     }
@@ -201,11 +203,11 @@
         document.querySelector('#alert_annualLeave').innerHTML = "Vui lòng chọn giờ nghỉ";
         submitButton.classList.add('disabled');
       }
-      else if ( datePicked !== '' && timePicked <= "<%= annualLeave %>" * 8 ) {
+      else if ( datePicked !== '' && timePicked <= "<%= user.annualLeave %>" * 8 ) {
         document.querySelector('#alert_annualLeave').innerHTML = '';
         submitButton.classList.remove('disabled');
       }
-      else if (timePicked > "<%= annualLeave %>" * 8) {
+      else if (timePicked > "<%= user.annualLeave %>" * 8) {
         document.querySelector('#alert_annualLeave').innerHTML = "Số ngày phép không đủ";
         submitButton.classList.add('disabled');
       }

@@ -1,28 +1,6 @@
 //get main app
 exports.getApp = (req, res, next) => {
-  let workHistory = req.user.progress.workHistory;
-  const today = new Date();
-  if (workHistory.length === 0) {
-    res.render("./main/home", {
-      name: req.user.name,
-      email: req.user.email,
-      image: req.user.image,
-      workHistory: workHistory,
-      status: req.user.progress.status,
-      totalTime: 0,
-      annualLeave: req.user.annualLeave,
-      today: today,
-    });
-  } else {
-    res.render("./main/home", {
-      name: req.user.name,
-      image: req.user.image,
-      workHistory: workHistory,
-      status: req.user.progress.status,
-      annualLeave: req.user.annualLeave,
-      today: today,
-    });
-  }
+  res.render("./main/home", { user: req.user });
 };
 
 // navbar link page

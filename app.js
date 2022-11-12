@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //import routes
 app.use((req, res, next) => {
-  User.findById("63679ceada443c1f5c7aff5f")
+  User.findById("636f308c92109560a2a06dc3")
   .then(user => {
       req.user = user;
       next();
