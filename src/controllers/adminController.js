@@ -1,11 +1,17 @@
 //get main app
 exports.getApp = (req, res, next) => {
-  res.render("./main/home", { user: req.user });
+  res.render("./main/home", { 
+    user: req.user,
+    path: '/',
+   });
 };
 
 // navbar link page
 exports.getUserInfoPage = (req, res) => {
-  res.render("./main/user-info", { user: req.user });
+  res.render("./main/user-info", { 
+    user: req.user,
+    path: '/user-info', 
+  });
 };
 
 exports.getWorkingInfoPage = (req, res) => {
@@ -92,19 +98,27 @@ exports.getWorkingInfoPage = (req, res) => {
   res.render("./main/working-info", {
     user: req.user,
     workHistories: workHistories,
+    path: '/working-info',
   });
 };
 
 exports.getUserCovidInfoPage = (req, res) => {
-  res.render("./main/user-covid-info", { user: req.user });
+  res.render("./main/user-covid-info", { 
+    user: req.user,
+    path: '/user-covid-info',
+  });
 };
 
 exports.getLoginPage = (req, res) => {
-  res.render("./main/login");
+  res.render("./main/login", {
+    path: '/login',
+  });
 };
 
 exports.getSignupPage = (req, res) => {
-  res.render("./main/signup");
+  res.render("./main/signup", {
+    path: '/signup',
+  });
 };
 
 // post link
