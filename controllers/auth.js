@@ -13,10 +13,7 @@ exports.getLogin = (req, res) => {
     .then(user => {
       req.session.isLoggedIn = true;
       req.session.user = user;
-      res.session.save(err => {
-        console.log(err);
-        res.redirect('/');
-      });
+      res.redirect('/');
     })
     .catch(error => {
       console.log(error);
