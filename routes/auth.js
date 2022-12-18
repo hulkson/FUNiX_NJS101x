@@ -49,7 +49,7 @@ router.post('/signup',
          .trim()
          .custom((value, { req }) => {
             if (value !== req.body.password) {
-               throw new Error('password do not match')
+               throw new Error('password do not match');
             }
             return true;
          })
