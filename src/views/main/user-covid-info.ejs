@@ -17,13 +17,7 @@
            <button class="btn btn-primary m-2" type="button" data-bs-toggle="collapse" data-bs-target="#vaccine-info" aria-expanded="false" aria-controls="vaccine-info">Thông tin Vaccine</button>
            <button class="btn btn-success m-2" type="button" data-bs-toggle="collapse" data-bs-target="#temperature-info" aria-expanded="false" aria-controls="temperature-info">Thông tin Thân Nhiệt</button>
         </div>
-        <!-- thông tin covid nhân viên -->
-        <% if (isAuth && user.accountType === 'admin') { %>
-          <div class=" text-center mt-5 justify-content-center align-items-center">
-            <h4>THÔNG TIN COVID NHÂN VIÊN</h4> 
-            <H1>TÊN NHÂN VIÊN:</H1>
-         </div>
-        <% } %>
+    
         <!-- vaccine-info-form -->
         <form action="/vaccine-info" method="POST" class="collapse col-8 offset-2 mt-5" id="vaccine-info">
          <div class="modal-content align-items-center">
@@ -181,7 +175,46 @@
            </tbody>
          </table>
        </form>
-
+       <!-- thông tin covid nhân viên -->
+       <% if (isAuth && user.accountType === 'admin') { %>
+        <div class=" text-center mt-5 justify-content-center align-items-center">
+          <h4>THÔNG TIN COVID NHÂN VIÊN</h4>
+          <br>
+          <!-- loop userList -->
+          <% for (let user of userList) { %>
+            <h5>Tên Nhân Viên: <%= user.name %></h5>
+            <!-- staff vaccine info stripe table -->
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Ngày Tiêm</th>
+                  <th scope="col">Mũi Thứ</th>
+                  <th scope="col">Nhà Sản Xuất</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (user.vaccineInfo.length === 0) { %>
+                  <tr>
+                    <td class="col-12 col-sm-4">--</td>
+                    <td class="col-12 col-sm-2">--</td>
+                    <td class="col-12 col-sm-2">--</td>
+                  </tr> 
+                <% } else { %>
+                    <% for (let vaccine of user.vaccineInfo) { 
+                      let injectedDate = vaccine.injectDate.toDateString().replace(/^\S+\s/,'');
+                    %>
+                    <tr>
+                      <td class="col-12 col-sm-4"><%= injectedDate %></td>
+                      <td class="col-12 col-sm-2"><%= vaccine.vaccineNumber %></td>
+                      <td class="col-12 col-sm-2"><%= vaccine.vaccineType %></td>
+                    </tr>
+                    <% } %>
+                <% } %>
+                </tbody>
+              </table>
+            <% } %>
+       </div>
+      <% } %>
       </div>
    </div>
 </main>

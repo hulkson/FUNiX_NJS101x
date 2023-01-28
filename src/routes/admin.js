@@ -13,6 +13,7 @@ router.get('/', adminController.getApp);
 router.get('/user-info', isAuth, adminController.getUserInfoPage);
 router.get('/working-info', isAuth, adminController.getWorkingInfoPage);
 router.get('/user-covid-info', isAuth, adminController.getUserCovidInfoPage);
+router.get('/manage', isAuth, adminController.getManagePage);
 
 // post method route
 router.post('/checkin', isAuth, adminController.postCheckin);
@@ -21,5 +22,7 @@ router.post('/user-info', isAuth, adminController.postUserInfoPage);
 router.post('/onleave', isAuth, adminController.postOnleave);
 router.post('/vaccine-info', isAuth, adminController.postVaccineInfo);
 router.post('/temperature-info', isAuth, adminController.postTemperatureInfo);
+router.post('/manage-change-status', isAuth, adminController.postManageChangeStatus);
+router.post('/manage-delete-work', isAuth, adminController.postManageDeleteWork);
 
 module.exports = router;

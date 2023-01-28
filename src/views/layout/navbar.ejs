@@ -19,7 +19,7 @@
             <% } %>
             <% if (isAuth && user.accountType === 'admin') { %>
                <li class="nav-item">
-                  <a class="nav-link <%= path === '/user-info' ? 'active' : '' %>" aria-current="page" href="/manage">Trang Quản Lý</a>
+                  <a class="nav-link <%= path === '/manage' ? 'active' : '' %>" aria-current="page" href="/manage">Trang Quản Lý</a>
                </li>
             <% } %>
          </ul>

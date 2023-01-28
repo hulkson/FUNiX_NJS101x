@@ -124,15 +124,22 @@ exports.getUserCovidInfoPage = (req, res) => {
   );
 };
 
+exports.getManagePage = (req, res) => {
+  User.find({ accountType: "user" })
+    .then(
+      (userList) => {
+        res.render("./main/manage", { 
+          userList: userList,
+          user: req.user,
+          path: '/manage',
+        });
+      }
+  );
+};
+
 exports.getLoginPage = (req, res) => {
   res.render("./main/login", {
     path: '/login',
-  });
-};
-
-exports.getSignupPage = (req, res) => {
-  res.render("./main/signup", {
-    path: '/signup',
   });
 };
 
@@ -215,4 +222,13 @@ exports.postTemperatureInfo = (req, res) => {
     res.redirect("/user-covid-info");
   });
 };
+
+exports.postManageChangeStatus = (req, res) => {
+  console.log(req.body);
+};
+
+exports.postManageDeleteWork = (req, res) => {
+  console.log(req.body);
+};
+
 
