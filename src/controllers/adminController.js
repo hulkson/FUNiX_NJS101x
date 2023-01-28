@@ -1,3 +1,5 @@
+const User = require("../models/user");
+
 //get main app
 exports.getApp = (req, res, next) => {
   res.render("./main/home", { 
@@ -92,21 +94,34 @@ exports.getWorkingInfoPage = (req, res) => {
     let j = { date: dateValue, workHis: workHis, annual: annual };
     workHistories.push(j);
   }
-  const array = workHistories.sort((a, b) => {
-    a.annual - b.annual;
-  });
-  res.render("./main/working-info", {
-    user: req.user,
-    workHistories: workHistories,
-    path: '/working-info',
-  });
+  
+  User.find({ accountType: "admin" })
+    .then(
+      (admin) => {
+        let managerId = admin[0]._id;
+        let managerName = admin[0].name;
+        res.render("./main/working-info", {
+          managerId: managerId,
+          managerName: managerName,
+          user: req.user,
+          workHistories: workHistories,
+          path: '/working-info',
+        });
+      }
+  );
 };
 
 exports.getUserCovidInfoPage = (req, res) => {
-  res.render("./main/user-covid-info", { 
-    user: req.user,
-    path: '/user-covid-info',
-  });
+  User.find({ accountType: "user" })
+    .then(
+      (userList) => {
+        res.render("./main/user-covid-info", { 
+          userList: userList,
+          user: req.user,
+          path: '/user-covid-info',
+        });
+      }
+  );
 };
 
 exports.getLoginPage = (req, res) => {
@@ -200,3 +215,4 @@ exports.postTemperatureInfo = (req, res) => {
     res.redirect("/user-covid-info");
   });
 };
+

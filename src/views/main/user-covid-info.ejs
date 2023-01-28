@@ -11,12 +11,19 @@
 <main>
    <div class="container">
       <div class="row">
-
-         <div class="d-flex mt-5 justify-content-center align-items-center">
-            <button class="btn btn-primary m-2" type="button" data-bs-toggle="collapse" data-bs-target="#vaccine-info" aria-expanded="false" aria-controls="vaccine-info">Thông tin Vaccine</button>
-            <button class="btn btn-success m-2" type="button" data-bs-toggle="collapse" data-bs-target="#temperature-info" aria-expanded="false" aria-controls="temperature-info">Thông tin Thân Nhiệt</button>
-          </div>
-
+        <!-- thông tin covid cá nhân -->
+        <div class=" text-center mt-5 justify-content-center align-items-center">
+           <h4>THÔNG TIN COVID CÁ NHÂN</h4> 
+           <button class="btn btn-primary m-2" type="button" data-bs-toggle="collapse" data-bs-target="#vaccine-info" aria-expanded="false" aria-controls="vaccine-info">Thông tin Vaccine</button>
+           <button class="btn btn-success m-2" type="button" data-bs-toggle="collapse" data-bs-target="#temperature-info" aria-expanded="false" aria-controls="temperature-info">Thông tin Thân Nhiệt</button>
+        </div>
+        <!-- thông tin covid nhân viên -->
+        <% if (isAuth && user.accountType === 'admin') { %>
+          <div class=" text-center mt-5 justify-content-center align-items-center">
+            <h4>THÔNG TIN COVID NHÂN VIÊN</h4> 
+            <H1>TÊN NHÂN VIÊN:</H1>
+         </div>
+        <% } %>
         <!-- vaccine-info-form -->
         <form action="/vaccine-info" method="POST" class="collapse col-8 offset-2 mt-5" id="vaccine-info">
          <div class="modal-content align-items-center">
@@ -61,6 +68,7 @@
            </div>
            
            <div class="modal-footer">
+             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
              <button type="submit" class="btn btn-primary" id="vaccine-info-submit">Đăng Ký</button>
            </div>
          </div>
@@ -135,6 +143,7 @@
            </div>
            
            <div class="modal-footer">
+             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
              <button type="submit" class="btn btn-success" id="temperature-info-submit">Khai Báo</button>
            </div>
          </div>

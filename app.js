@@ -1,20 +1,30 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const csrf = require('csurf');
 const User = require("./src/models/user");
 
 // connect mongoDb
 const mongoose = require("mongoose");
 const MONGODB_URI = "mongodb+srv://root:Hulkson052@cluster0.b0zgemo.mongodb.net/asm1?retryWrites=true&w=majority";
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 // global variable
 const app = express();
+const store = new MongoDBStore({
+   uri: MONGODB_URI,
+   collection: 'sessions',
+});
+
+const csrfProtection = csrf();
 
 // set view handler
 app.set("view engine", "ejs");
 app.set("views", "src/views");
 
 const adminRoutes = require("./src/routes/admin");
+const authRoutes = require("./src/routes/auth");
 const errorController = require("./src/controllers/error");
 
 // config middileware
@@ -23,19 +33,41 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // set public folder to static
 app.use(express.static(path.join(__dirname, "public")));
 
-//import routes
+//apply session
+app.use(session({
+   secret: 'my secret', 
+   resave: false,
+   saveUninitialized: false,
+   store: store,
+}));
+
+app.use(csrfProtection);
+
 app.use((req, res, next) => {
-  User.findById("636f308c92109560a2a06dc3")
-  .then(user => {
-      req.user = user;
-      next();
-  })
-  .catch(err => {
-      console.log(err);
-  })
-})
+   res.locals.isAuth = req.session.isAuth;
+   res.locals.csrfToken = req.csrfToken();
+   next();
+});
+
+app.use((req, res, next) => {
+   if (!req.session.user) {
+     return next();
+   }
+   User.findById(req.session.user._id)
+     .then(user => {
+       if (!user) {
+         return next();
+       }
+       req.user = user;
+       next();
+     })
+     .catch(err => {
+       next(new Error(err));
+     });
+ });
 
 app.use("/", adminRoutes);
+app.use(authRoutes);
 
 app.use(errorController.get404);
 
@@ -43,24 +75,6 @@ app.use(errorController.get404);
 mongoose
    .connect(MONGODB_URI)
    .then(() => {
-      User.findOne().then((user) => {
-        if (!user) {
-          const user = new User({
-             name: "Trịnh Văn Musk",
-             email: "musk@mail.com",
-             doB: "1/1/1990",
-             salaryScale: 1.0,
-             startDate: "1/1/2022",
-             department: "Công Ty",
-             annualLeave: 2,
-             image: "https://e7.pngegg.com/pngimages/96/836/png-clipart-elon-musk-sticker-chief-executive-telegram-musk-stick-hand-cartoon.png",
-             vaccineInfo: [],
-             bodyTemperatureInfo: [],
-             progress: [],
-          });
-          user.save();
-        }
-      });
       app.listen(3000);
    })
    .catch((err) => {

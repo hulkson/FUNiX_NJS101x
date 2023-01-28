@@ -2,24 +2,24 @@ const express = require('express');
 
 const adminController = require('../controllers/adminController');
 
+const isAuth = require('../../middleware/is-auth');
+
 const router = express.Router();
 
 // get homepage
 router.get('/', adminController.getApp);
 
 // navbar link page
-router.get('/user-info', adminController.getUserInfoPage);
-router.get('/working-info', adminController.getWorkingInfoPage);
-router.get('/user-covid-info', adminController.getUserCovidInfoPage);
-router.get('/login', adminController.getLoginPage);
-router.get('/signup', adminController.getSignupPage);
+router.get('/user-info', isAuth, adminController.getUserInfoPage);
+router.get('/working-info', isAuth, adminController.getWorkingInfoPage);
+router.get('/user-covid-info', isAuth, adminController.getUserCovidInfoPage);
 
 // post method route
-router.post('/checkin', adminController.postCheckin);
-router.post('/checkout', adminController.postCheckout);
-router.post('/user-info', adminController.postUserInfoPage);
-router.post('/onleave', adminController.postOnleave);
-router.post('/vaccine-info', adminController.postVaccineInfo);
-router.post('/temperature-info', adminController.postTemperatureInfo);
+router.post('/checkin', isAuth, adminController.postCheckin);
+router.post('/checkout', isAuth, adminController.postCheckout);
+router.post('/user-info', isAuth, adminController.postUserInfoPage);
+router.post('/onleave', isAuth, adminController.postOnleave);
+router.post('/vaccine-info', isAuth, adminController.postVaccineInfo);
+router.post('/temperature-info', isAuth, adminController.postTemperatureInfo);
 
 module.exports = router;

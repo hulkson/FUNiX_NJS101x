@@ -1,6 +1,6 @@
   <%- include('../layout/head.ejs') %>
   <link rel="stylesheet" href="/css/main.css">
-  <title>Funix-ASM1</title>
+  <title>Funix-ASM2</title>
 </head>
 <!-- ------------------------------------- -->
 
@@ -10,6 +10,14 @@
 <!-- ------------------------------------- -->
   <main>
     <div class="container">
+      <!-- check authentication -->
+      <% if (!isAuth) { %>
+        <div class="d-flex mt-5 justify-content-center align-items-center">
+          <div class="d-flex justify-content-center align-items-center">
+            <button type="button" class="btn disabled btn-primary m-2" >Vui lòng đăng nhập</button>
+          </div>
+        </div>
+      <% } else { %>
       <!-- User Info -->
       <div class="d-flex mt-5 justify-content-center align-items-center">
         <img class="col-2" src="<%= user.image %>" alt="<%= user.name %>">
@@ -39,7 +47,7 @@
               <option id="Khánh Hàng">Khách Hàng</option>
               <option id="Nhà">Nhà</option>
             </select>
-
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <button type="submit" class="btn btn-primary col-xs-12 col-sm-3">Bắt đầu</button>
 
             <!-- Post Checkout-->
@@ -51,6 +59,7 @@
                   <option id="Khánh Hàng">Khách Hàng</option>
                   <option id="Nhà">Nhà</option>
                 </select>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
               <button type="submit" class="btn btn-danger col-xs-12 col-sm-3 dangerous">Kết thúc</button>
             <% } %>
           </form>
@@ -152,6 +161,7 @@
             </div>
             
             <div class="modal-footer">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
               <button type="submit" class="btn btn-primary disabled" id="onleave-submit">Đăng Ký</button>
             </div>
           </div>
@@ -200,5 +210,6 @@
     }
   };
 </script>
+<% } %>
   <%- include('../layout/end.ejs') %>
 </body>

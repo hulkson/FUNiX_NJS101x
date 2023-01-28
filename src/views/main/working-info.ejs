@@ -10,7 +10,20 @@
 <!-- ------------------------------------- -->
 <main>
   <nav>
-      <div class="nav nav-tabs" id="nav-tab" role="tablist" >
+   <!-- managerInfo -->
+   <div class=" text-center ">
+      <br>
+      <h2>THÔNG TIN QUẢN LÝ</h2>
+      <br>
+      <input disabled value="ID Quản Lý:"></input>
+      <input disabled value="<%= managerId %>"></input>
+      <br>
+      <input disabled value="Tên Quản Lý:"></input>
+      <input disabled value="<%= managerName %>"></input>
+   </div>
+
+   <!-- working info -->
+      <div class="mt-4 justify-content-center nav nav-tabs" id="nav-tab" role="tablist" >
          <% 
          const tabName = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
          const getToDate = new Date()

@@ -24,6 +24,7 @@
             <h6 id="user-annualLeave">Phép Năm: <%= user.annualLeave %> Ngày</h6>
             <label for="imageUrl" class="form-label">Avatar URL</label>
             <input type="text" class="form-control" name="imageUrl" id="imageUrl">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <button class="btn btn-primary mt-2" type="submit">Change</button>
          </form>
       </div>
