@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const csrf = require('csurf');
 const User = require("./src/models/user");
+const multer = require('multer');
 
 // connect mongoDb
 const mongoose = require("mongoose");
@@ -19,6 +20,28 @@ const store = new MongoDBStore({
 
 const csrfProtection = csrf();
 
+const fileStorage = multer.diskStorage({
+   destination: (req, file, cb) => {
+     cb(null, 'images');
+   },
+   filename: (req, file, cb) => {
+     const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9);
+     cb(null, file.originalname + '-' + uniqueName);
+   }
+ });
+ 
+ const fileFilter = (req, file, cb) => {
+   if (
+     file.mimetype === 'image/png' ||
+     file.mimetype === 'image/jpg' ||
+     file.mimetype === 'image/jpeg'
+   ) {
+     cb(null, true);
+   } else {
+     cb(null, false);
+   }
+ };
+
 // set view handler
 app.set("view engine", "ejs");
 app.set("views", "src/views");
@@ -29,9 +52,10 @@ const errorController = require("./src/controllers/error");
 
 // config middileware
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image'));
 // set public folder to static
 app.use(express.static(path.join(__dirname, "public")));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //apply session
 app.use(session({

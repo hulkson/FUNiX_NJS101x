@@ -111,4 +111,12 @@ const userSchema = new Schema({
    },
 });
 
+userSchema.methods.removeFromUser = (user, workingId) => {
+   const updatedWorkHistory = user.progress.workHistory.filter(workingRow => {
+      return workingRow.id !== workingId;
+   });
+   user.progress.workHistory = updatedWorkHistory;
+   return user.save();
+ };
+
 module.exports = mongoose.model("User", userSchema);

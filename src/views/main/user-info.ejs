@@ -12,7 +12,7 @@
    <div class="container">
       <div class="d-flex mt-5 justify-content-center align-items-center">
          <img class="mb-3 col-4 col-sm-6 col-xs-12" src="<%= user.image %>" alt="<%= user.name %>">
-         <form action="/user-info" class="m-5 col-sm-6 col-xs-12 col-6" method="POST">
+         <form action="/user-info" class="m-5 col-sm-6 col-xs-12 col-6" method="POST" enctype="multipart/form-data">
             <h4 class="mt-5">Thông Tin Cá Nhân:</h4>
             <br>
             <h6 id="user-id">User ID: <%= user._id.toString().toUpperCase() %></h6>
@@ -22,8 +22,8 @@
             <h6 id="user-startDate">Ngày Bắt Đầu: <%= user.startDate %></h6>
             <h6 id="user-department">Nơi Làm Việc: <%= user.department %></h6>
             <h6 id="user-annualLeave">Phép Năm: <%= user.annualLeave %> Ngày</h6>
-            <label for="imageUrl" class="form-label">Avatar URL</label>
-            <input type="text" class="form-control" name="imageUrl" id="imageUrl">
+            <label for="image" class="form-label">Avatar</label>
+            <input type="file" class="form-control" name="image" id="image">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <button class="btn btn-primary mt-2" type="submit">Change</button>
          </form>

@@ -1,4 +1,11 @@
+const fs = require('fs');
+const path = require('path');
+const PDFDocument = require('pdfkit');
+
 const User = require("../models/user");
+const fileHelper = require('../controllers/deleteOldFile');
+
+const ITEMS_PER_PAGE = 3;
 
 //get main app
 exports.getApp = (req, res, next) => {
@@ -17,6 +24,8 @@ exports.getUserInfoPage = (req, res) => {
 };
 
 exports.getWorkingInfoPage = (req, res) => {
+  const page = req.query.page;
+
   const workHistories = new Array();
   //create Date list
   let tempDate = [];
@@ -143,6 +152,36 @@ exports.getLoginPage = (req, res) => {
   });
 };
 
+exports.getworkingSheet = (req, res, next) => {
+  const userId = req.params.userId;
+  User.find({ _id: userId })
+    .then(user => {
+      const sheetName = 'sheet-' + userId + '.pdf';
+      const sheetPath = path.join('data', 'working-sheet', sheetName);
+
+      const pdfDoc = new PDFDocument();
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader(
+        'Content-Disposition',
+        'inline; filename="' + sheetName + '"'
+      );
+      pdfDoc.pipe(fs.createWriteStream(sheetPath));
+      pdfDoc.pipe(res);
+
+      pdfDoc.fontSize(26).text('Personal Vaccine Info', {
+        underline: true
+      });
+      pdfDoc.text('-----------------------');
+      user[0].vaccineInfo.forEach(infoRow => {
+        pdfDoc.fontSize(14).text('Vaccine Number: ' + infoRow.vaccineNumber);
+        pdfDoc.fontSize(14).text('Vaccine Type: ' + infoRow.vaccineType);
+        pdfDoc.fontSize(14).text('Date: ' + infoRow.injectDate.toDateString().replace(/^\S+\s/, ""));
+        pdfDoc.fontSize(14).text('-----------------------');
+      });
+      pdfDoc.end();
+    })
+};
+
 // post link
 exports.postCheckin = (req, res, next) => {
   const workplace = req.body.workplace;
@@ -169,7 +208,9 @@ exports.postCheckout = (req, res, next) => {
 };
 
 exports.postUserInfoPage = (req, res) => {
-  req.user.image = req.body.imageUrl;
+  fileHelper.deleteFile(req.user.image);
+  const image = req.file;
+  req.user.image = image.path;
   req.user.save().then(() => {
     res.redirect("user-info");
   });
@@ -224,11 +265,29 @@ exports.postTemperatureInfo = (req, res) => {
 };
 
 exports.postManageChangeStatus = (req, res) => {
-  console.log(req.body);
+  const userId = req.body.userId;
+  User.find({ _id: userId })
+    .then(user => {
+      const date = new Date();
+      const length = user[0].progress.workHistory.length;
+      user[0].progress.workHistory[length - 1].checkout = date;
+      user[0].progress.status = 'true';
+      user[0].save().then(() => {
+        res.redirect("/manage");
+      });
+    })
 };
 
 exports.postManageDeleteWork = (req, res) => {
-  console.log(req.body);
+  const userId = req.body.userId;
+  const workingId = req.body.workingId;
+  User.find({ _id: userId })
+    .then(user => {
+      user[0].removeFromUser(user[0], workingId)
+      .then((err) => {
+        res.redirect("/manage");
+      });
+    })
 };
 
 

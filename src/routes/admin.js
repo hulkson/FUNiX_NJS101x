@@ -13,6 +13,7 @@ router.get('/', adminController.getApp);
 router.get('/user-info', isAuth, adminController.getUserInfoPage);
 router.get('/working-info', isAuth, adminController.getWorkingInfoPage);
 router.get('/user-covid-info', isAuth, adminController.getUserCovidInfoPage);
+router.get('/user-covid-info/:userId', isAuth, adminController.getworkingSheet);
 router.get('/manage', isAuth, adminController.getManagePage);
 
 // post method route
